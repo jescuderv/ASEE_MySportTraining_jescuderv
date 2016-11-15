@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_activity"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/nav_activity" />
+        <item
+            android:id="@+id/nav_training"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/nav_training" />
+        <item
+            android:id="@+id/nav_statistics"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/nav_statistics" />
+        <item
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/nav_calendar" />
+        <item
+            android:id="@+id/nav_weightControl"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/nav_weightControl" />
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/nav_frieds" />
+    </group>
+
+    <item android:title="@string/nav_config">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/nav_logout" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/rv_friends_usr_profile_image"
+        android:layout_width="wrap_content"
+        android:layout_height="65dp"
+        android:layout_marginStart="5dp"
+        android:layout_weight="0.3"
+        android:src="@android:drawable/sym_def_app_icon"
+        app:civ_border_color="@color/colorPrimaryDark"
+        app:civ_border_width="2dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="0.4"
+        android:layout_marginStart="5dp">
+
+        <TextView
+            android:id="@+id/rv_friends_usr_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/usr_username" />
+
+        <TextView
+            android:id="@+id/rv_friends_usr_first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/usr_first_name" />
+
+        <TextView
+            android:id="@+id/rv_friends_usr_last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/usr_last_name" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/rv_friends_usr_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/usr_score"
+        android:layout_marginStart="5dp"
+        android:layout_weight="0.2"
+        android:layout_gravity="center"/>
+</LinearLayout>

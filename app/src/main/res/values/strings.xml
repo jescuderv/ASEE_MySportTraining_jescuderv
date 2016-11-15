@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">MySportTraining</string>
+
+    <!--Login-->
+    <string name="logo">Logo</string>
+    <string name="loginButton">Inicar sesión</string>
+    <string name="registerButton">Registrarse</string>
+
+    <!--NavMenu-->
+    <string name="nav_activity">Actividad</string>
+    <string name="nav_training">Entrenamiento</string>
+    <string name="nav_statistics">Estadísticas</string>
+    <string name="nav_calendar">Calendario</string>
+    <string name="nav_weightControl">Control de peso</string>
+    <string name="nav_frieds">Amigos</string>
+    <string name="nav_config">Configuración</string>
+    <string name="nav_logout">Cerrar sesión</string>
+
+    <!--ActionMenu-->
+    <string name="action_settings">Configuración</string>
+    <string name="action_help">Ayuda</string>
+    <string name="action_about">Acerca de</string>
+
+    <!--UserProfile-->
+    <string name="usr_email">Correo electrónico</string>
+    <string name="usr_password">Contraseña</string>
+    <string name="usr_profileImage">Imagen de perfil</string>
+    <string name="usr_username">username</string>
+    <string name="usr_first_name">Nombre</string>
+    <string name="usr_last_name">Apellidos</string>
+    <string name="usr_score">SCORE</string>
+    <string name="usr_height">Altura (cm)</string>
+    <string name="usr_weight">Peso (kg)</string>
+    <string name="usr_age">Edad (años)</string>
+    <string name="usr_sex">Sexo</string>
+    <string name="usr_physical_condition">Condición física</string>
+    <string name="value">Valor</string>
+
+    <!--Friends-->
+    <string name="friends_podium">Podium</string>
+    <string name="friends_add_button">Agregar amigos</string>
+
+    <!--WeightControl-->
+    <string name="weight_control_icon">Control de peso</string>
+    <string name="weight_control_add_button">Añadir</string>
+
+    <!--Calendar-->
+    <string name="calendar_widget">Calendario</string>
+
+    <string name="hello_blank_fragment">hola</string>
+
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+</resources>
