@@ -68,7 +68,6 @@ public class StatisticsFragment extends Fragment {
             }
         });
 
-
         return view;
     }
 }

@@ -47,6 +47,10 @@
     <!--Calendar-->
     <string name="calendar_widget">Calendario</string>
 
+    <!--Training-->
+    <string name="training_list">Lista de Entrenamientos</string>
+    <string name="add_training_button">Agregar actividad</string>
+
     <string name="hello_blank_fragment">hola</string>
 
     <string name="title_activity_main">MainActivity</string>
