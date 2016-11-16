@@ -1,23 +1,18 @@
 package asee.giiis.unex.es.mysporttraining.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import android.widget.Button;
 
 import asee.giiis.unex.es.mysporttraining.R;
+import asee.giiis.unex.es.mysporttraining.ResultsMapActivity;
 
-public class ActivityFragment extends Fragment implements OnMapReadyCallback {
-
-    private GoogleMap mGoogleMap;
-    private SupportMapFragment supportMapFragment;
+public class ActivityFragment extends Fragment {
 
 
     @Override
@@ -26,22 +21,19 @@ public class ActivityFragment extends Fragment implements OnMapReadyCallback {
 
         View view = inflater.inflate(R.layout.fragment_activity, container, false);
 
-        FragmentManager fm = getChildFragmentManager();
-        supportMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.google_map);
-        if (supportMapFragment == null) {
-            supportMapFragment = SupportMapFragment.newInstance();
-            fm.beginTransaction().replace(R.id.google_map, supportMapFragment).commit();
-        }
-
-        supportMapFragment.getMapAsync(this);
-
+        Button stopButton = (Button) view.findViewById(R.id.activity_stop_button);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startResultsMapActivity();
+            }
+        });
         return view;
     }
 
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mGoogleMap = googleMap;
+    private void startResultsMapActivity(){
+        Intent intent = new Intent(getActivity(), ResultsMapActivity.class);
+        startActivity(intent);
     }
 
 }
