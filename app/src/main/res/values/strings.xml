@@ -35,6 +35,16 @@
     <string name="usr_sex">Sexo</string>
     <string name="usr_physical_condition">Condición física</string>
     <string name="value">Valor</string>
+    <string-array name="sex_array">
+        <item>Hombre</item>
+        <item>Mujer</item>
+    </string-array>
+    <string-array name="weight_condition_array">
+        <item>Inactividad física</item>
+        <item>Normal</item>
+        <item>Deportista</item>
+    </string-array>
+
 
     <!--Friends-->
     <string name="friends_podium">Podium</string>
