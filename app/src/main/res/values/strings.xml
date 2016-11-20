@@ -70,8 +70,14 @@
     <string name="activity_start_button">Comenzar</string>
     <string name="activity_stop_button">Parar</string>
 
-    <string name="title_activity_main">MainActivity</string>
+    <!--CreateTraining-->
+    <string name="create_training">Nombre del entrenamiento</string>
+    <string name="create_training_list">Lista de ejercicios</string>
+    <string name="create_training_add_button">Agregar ejercicio</string>
 
+
+    <!--NavigationDrawer-->
+    <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

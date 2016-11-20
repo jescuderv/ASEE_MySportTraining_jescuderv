@@ -33,7 +33,10 @@
             android:glEsVersion="0x00020000"
             android:required="true" />
 
-        <activity android:name=".ResultsMapActivity"></activity>
+        <activity android:name=".ResultsMapActivity" />
+        <activity android:name=".TrainingNewActivity" />
+        <activity android:name=".TrainingSelectCategoryActivity" />
+        <activity android:name=".TrainingSelectActivity"></activity>
     </application>
 
 </manifest>

@@ -20,7 +20,7 @@ public class FriendsFragment extends Fragment {
 
      RecyclerView mRecyclerView;
      RecyclerView.Adapter mAdapter;
-     List<User> userList = new ArrayList<>();
+     List<User> mUserList = new ArrayList<>();
 
 
     @Override
@@ -37,32 +37,32 @@ public class FriendsFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
 
         // Adapter
-        mAdapter = new FriendsAdapter(this.getActivity(), userList);
+        mAdapter = new FriendsAdapter(this.getActivity(), mUserList);
         mRecyclerView.setAdapter(mAdapter);
 
         return view;
     }
 
     private void prepareData(){
-        User user = new User("josecarloes", "Jose", "Escudero", "55502");
-        userList.add(user);
+        User user = new User("josecarloses", "Jose", "Escudero", "55502");
+        mUserList.add(user);
 
         user = new User("jimjujim", "Judit", "Jimenez", "2302");
-        userList.add(user);
+        mUserList.add(user);
 
         user = new User("javitan", "Javier", "Garcia", "85620");
-        userList.add(user);
+        mUserList.add(user);
 
         user = new User("azaharact", "Azahara", "Campos", "28701");
-        userList.add(user);
+        mUserList.add(user);
 
         user = new User("visen", "Vicente", "Gonzalez", "7620");
-        userList.add(user);
+        mUserList.add(user);
         user = new User("jimjujim", "Judit", "Jimenez", "2302");
-        userList.add(user);
+        mUserList.add(user);
 
         user = new User("javitan", "Javier", "Garcia", "875620");
-        userList.add(user);
+        mUserList.add(user);
     }
 
 }

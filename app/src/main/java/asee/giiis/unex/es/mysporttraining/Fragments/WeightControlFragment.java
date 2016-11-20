@@ -10,14 +10,13 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import asee.giiis.unex.es.mysporttraining.Objects.User;
 import asee.giiis.unex.es.mysporttraining.R;
 
 public class WeightControlFragment extends Fragment {
 
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
-    List<String> weightList = new ArrayList<>();
+    List<String> mWeightList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
