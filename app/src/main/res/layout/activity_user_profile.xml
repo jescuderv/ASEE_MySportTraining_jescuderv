@@ -77,7 +77,7 @@
                 android:text="@string/usr_first_name" />
 
             <TextView
-                android:id="@+id/usr_prof_value1"
+                android:id="@+id/usr_prof_first_name_value"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -101,7 +101,7 @@
                 android:text="@string/usr_last_name" />
 
             <TextView
-                android:id="@+id/usr_prof_value2"
+                android:id="@+id/usr_prof_last_name_value"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -124,7 +124,7 @@
                 android:text="@string/usr_email" />
 
             <TextView
-                android:id="@+id/usr_prof_value3"
+                android:id="@+id/usr_prof_email_value"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -161,7 +161,7 @@
                 android:text="@string/usr_height" />
 
             <TextView
-                android:id="@+id/usr_prof_value4"
+                android:id="@+id/usr_prof_height_value"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -184,7 +184,7 @@
                 android:text="@string/usr_weight" />
 
             <TextView
-                android:id="@+id/usr_prof_value5"
+                android:id="@+id/usr_prof_weight_value"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -207,7 +207,7 @@
                 android:text="@string/usr_age" />
 
             <TextView
-                android:id="@+id/usr_prof_value6"
+                android:id="@+id/usr_prof_age_value"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -230,7 +230,7 @@
                 android:text="@string/usr_sex" />
 
             <TextView
-                android:id="@+id/usr_prof_value7"
+                android:id="@+id/usr_prof_sex_value"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -253,7 +253,7 @@
                 android:text="@string/usr_physical_condition" />
 
             <TextView
-                android:id="@+id/usr_prof_value8"
+                android:id="@+id/usr_prof_physical_condition_value"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"

@@ -24,6 +24,19 @@ public class User {
     private Map<Date, String> weight_control;
 //    private List<Activity> activityList;
 
+
+
+    public User(){
+
+    }
+
+    public User(String username, String firstName, String lastName, String score) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.score = score;
+    }
+
     public int getId() {
         return id;
     }
@@ -49,14 +62,6 @@ public class User {
         this.imageProfile = imageProfile;
     }
 
-
-
-    public User(String username, String firstName, String lastName, String score) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.score = score;
-    }
 
     public String getUsername() {
         return username;
