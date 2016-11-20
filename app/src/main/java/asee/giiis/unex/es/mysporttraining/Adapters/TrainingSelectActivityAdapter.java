@@ -14,15 +14,22 @@ import java.util.List;
 import asee.giiis.unex.es.mysporttraining.R;
 
 
-public class TrainingSelectCategoryAdapter extends RecyclerView.Adapter<TrainingSelectCategoryAdapter.ViewHolder> {
+public class TrainingSelectActivityAdapter extends RecyclerView.Adapter<TrainingSelectActivityAdapter.ViewHolder> {
     Context mContext;
     List<String> mActivitiesList = new ArrayList<String>();
 
+    public interface OnItemClickListener {
+        void onItemClick (String item); //Type of the element to be returned
+    }
+
+    private final OnItemClickListener mListener;
+
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public TrainingSelectCategoryAdapter(Context context, List<String> activitiesList){
+    public TrainingSelectActivityAdapter(Context context, List<String> activitiesList, OnItemClickListener listener){
         this.mActivitiesList = activitiesList;
         this.mContext = context;
+        this.mListener = listener;
     }
 
     // Create new views (invoked by the layout manager)
@@ -35,7 +42,7 @@ public class TrainingSelectCategoryAdapter extends RecyclerView.Adapter<Training
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(mActivitiesList.get(position));
+        holder.bind(mActivitiesList.get(position), mListener);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -54,9 +61,16 @@ public class TrainingSelectCategoryAdapter extends RecyclerView.Adapter<Training
             mTitle = (TextView) itemView.findViewById(R.id.rv_training_category_title);
         }
 
-        public void bind (String s){
+        public void bind (final String s, final OnItemClickListener listener){
             // Display each item in layout
             mTitle.setText(s);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(s);
+                }
+            });
+
         }
     }
 
