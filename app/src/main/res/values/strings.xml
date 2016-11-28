@@ -6,6 +6,11 @@
     <string name="loginButton">Inicar sesión</string>
     <string name="registerButton">Registrarse</string>
 
+    <!--NavigationDrawer-->
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <!--NavMenu-->
     <string name="nav_activity">Actividad</string>
     <string name="nav_training">Entrenamiento</string>
@@ -75,11 +80,11 @@
     <string name="create_training_list">Lista de ejercicios</string>
     <string name="create_training_add_button">Agregar ejercicio</string>
 
-
-    <!--NavigationDrawer-->
-    <string name="title_activity_main">MainActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-
+    <!--TrainingCategory-->
+    <string name="training_category_sports">Deportes</string>
+    <string name="training_category_cardio">Cardio</string>
+    <string name="training_category_collective">Colectivas</string>
+    <string name="training_category_gym_weights">Pesas libres</string>
+    <string name="training_category_strength">Fuerza</string>
+    <string name="training_category_elongation">Estiramientos</string>
 </resources>

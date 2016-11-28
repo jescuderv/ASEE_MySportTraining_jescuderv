@@ -2,7 +2,6 @@ package asee.giiis.unex.es.mysporttraining;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -11,8 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
-import java.util.Map;
+import asee.giiis.unex.es.mysporttraining.Objects.User;
 
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -27,7 +25,6 @@ public class UserProfileActivity extends AppCompatActivity {
     TextView mAge;
     TextView mSex;
     TextView mPhysicalCondition;
-
 
     // Reference root JSON database
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -58,25 +55,22 @@ public class UserProfileActivity extends AppCompatActivity {
         mUsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-               Map<String, String> map = new HashMap<>();
-                for (DataSnapshot data : dataSnapshot.getChildren()){
-                    map.put(data.getKey(), data.getValue(String.class));
-                }
-                mUsername.setText(map.get("username"));
-                mScore.setText(map.get("score"));
-                mFirstName.setText(map.get("firstName"));
-                mLastName.setText(map.get("lastName"));
-                mEmail.setText(map.get("email"));
-                mHeight.setText(map.get("height"));
-                mWeight.setText(map.get("weight"));
-                mAge.setText(map.get("age"));
-                mSex.setText(map.get("sex"));
-                mPhysicalCondition.setText(map.get("physicalCondition"));
+                User user = dataSnapshot.getValue(User.class);
+
+                mUsername.setText(user.getUsername());
+                mScore.setText(user.getScore().toString());
+                mFirstName.setText(user.getFirstName());
+                mLastName.setText(user.getLastName());
+                mEmail.setText(user.getEmail());
+                mHeight.setText(user.getHeight().toString());
+                mWeight.setText(user.getWeight().toString());
+                mAge.setText(user.getAge().toString());
+                mSex.setText(user.getSex());
+                mPhysicalCondition.setText(user.getPhysicalCondition());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("adious", "jaja");
 
             }
         });

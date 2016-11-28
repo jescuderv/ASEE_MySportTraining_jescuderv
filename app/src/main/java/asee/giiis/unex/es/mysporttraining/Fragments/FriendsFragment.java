@@ -44,25 +44,25 @@ public class FriendsFragment extends Fragment {
     }
 
     private void prepareData(){
-        User user = new User("josecarloses", "Jose", "Escudero", "55502");
-        mUserList.add(user);
-
-        user = new User("jimjujim", "Judit", "Jimenez", "2302");
-        mUserList.add(user);
-
-        user = new User("javitan", "Javier", "Garcia", "85620");
-        mUserList.add(user);
-
-        user = new User("azaharact", "Azahara", "Campos", "28701");
-        mUserList.add(user);
-
-        user = new User("visen", "Vicente", "Gonzalez", "7620");
-        mUserList.add(user);
-        user = new User("jimjujim", "Judit", "Jimenez", "2302");
-        mUserList.add(user);
-
-        user = new User("javitan", "Javier", "Garcia", "875620");
-        mUserList.add(user);
+//        User user = new User("josecarloses", "Jose", "Escudero", "55502");
+//        mUserList.add(user);
+//
+//        user = new User("jimjujim", "Judit", "Jimenez", "2302");
+//        mUserList.add(user);
+//
+//        user = new User("javitan", "Javier", "Garcia", "85620");
+//        mUserList.add(user);
+//
+//        user = new User("azaharact", "Azahara", "Campos", "28701");
+//        mUserList.add(user);
+//
+//        user = new User("visen", "Vicente", "Gonzalez", "7620");
+//        mUserList.add(user);
+//        user = new User("jimjujim", "Judit", "Jimenez", "2302");
+//        mUserList.add(user);
+//
+//        user = new User("javitan", "Javier", "Garcia", "875620");
+//        mUserList.add(user);
     }
 
 }

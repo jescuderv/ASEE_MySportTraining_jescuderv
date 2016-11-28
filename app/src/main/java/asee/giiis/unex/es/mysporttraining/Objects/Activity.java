@@ -2,14 +2,17 @@ package asee.giiis.unex.es.mysporttraining.Objects;
 
 public class Activity {
 
-    private int id;
     private String name;
-    private String score;
-    private String category;
+    private Integer score;
 
 
     public Activity(){
 
+    }
+
+    public Activity(String name, Integer score){
+        this.name = name;
+        this.score = score;
     }
 
     public String getName() {
@@ -20,28 +23,12 @@ public class Activity {
         this.name = name;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getScore() {
+    public Integer getScore() {
         return score;
     }
 
-    public void setScore(String score) {
+    public void setScore(Integer score) {
         this.score = score;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
 

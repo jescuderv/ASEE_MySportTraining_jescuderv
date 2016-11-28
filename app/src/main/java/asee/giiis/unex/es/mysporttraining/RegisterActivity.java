@@ -12,6 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -20,6 +23,10 @@ import fr.ganfra.materialspinner.MaterialSpinner;
 public class RegisterActivity extends AppCompatActivity {
 
     static private final int REQUEST_IMAGE_GET = 1;
+
+    // Reference root JSON database
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference mUsersRef = mRootRef.child("users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
