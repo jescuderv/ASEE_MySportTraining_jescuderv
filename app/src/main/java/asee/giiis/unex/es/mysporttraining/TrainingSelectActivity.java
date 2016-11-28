@@ -123,7 +123,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
         }
     }
 
-    private void exerciseDialog(Activity item) {
+    private void exerciseDialog(final Activity item) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_input_exercise, null);
@@ -155,11 +155,20 @@ public class TrainingSelectActivity extends AppCompatActivity {
         dialog.setPositiveButton(DIALOG_ACCEPT_BUTTON, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                mActivitiesRef = mRootRef.child("exerciseList").child("idUsuarioPrueba").child("lista1");
+                item.setDate(dateString);
+                item.setHour(timeString);
+                mActivitiesRef.push().setValue(item);
+                returnActivityNewTraining();
             }
         });
         dialog.create();
         dialog.show();
+    }
+
+    private void returnActivityNewTraining(){
+        Intent intent = new Intent(this, TrainingNewActivity.class);
+        startActivity(intent);
     }
 
     private void setDefaultDateTime() {

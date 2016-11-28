@@ -4,6 +4,8 @@ public class Activity {
 
     private String name;
     private Integer score;
+    private String date;
+    private String hour;
 
 
     public Activity(){
@@ -29,6 +31,22 @@ public class Activity {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getHour() {
+        return hour;
+    }
+
+    public void setHour(String hour) {
+        this.hour = hour;
     }
 
 
