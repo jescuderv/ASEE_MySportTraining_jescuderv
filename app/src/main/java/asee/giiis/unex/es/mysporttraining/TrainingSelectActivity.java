@@ -1,11 +1,21 @@
 package asee.giiis.unex.es.mysporttraining;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -14,6 +24,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import asee.giiis.unex.es.mysporttraining.Adapters.TrainingSelectActivityAdapter;
@@ -21,11 +33,22 @@ import asee.giiis.unex.es.mysporttraining.Objects.Activity;
 
 public class TrainingSelectActivity extends AppCompatActivity {
 
-    final static String CATEGORY = "category";
+    // 7 days in milliseconds - 7 * 24 * 60 * 60 * 1000
+    private static final int SEVEN_DAYS = 604800000;
+
+    private final static String CATEGORY = "category";
+    private final static String DIALOG_ACCEPT_BUTTON = "Aceptar";
+
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mActivitiesRef;
 
     private String mCategory;
+    private Date mDate;
+
+    private static String timeString;
+    private static String dateString;
+    private static TextView dateView;
+    private static TextView timeView;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -93,14 +116,163 @@ public class TrainingSelectActivity extends AppCompatActivity {
                     new TrainingSelectActivityAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(Activity item) {
-                            Toast.makeText(getApplicationContext(), "Item Clicked", Toast.LENGTH_LONG).show();
+                            exerciseDialog(item);
                         }
                     });
             mRecyclerView.setAdapter(mAdapter);
         }
     }
 
+    private void exerciseDialog(Activity item) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View v = inflater.inflate(R.layout.dialog_input_exercise, null);
+        dialog.setView(v);
 
+        TextView scoreView = (TextView) v.findViewById(R.id.dialog_score);
+        scoreView.setText("Score: " + Integer.toString(item.getScore()));
+
+        dateView = (TextView) v.findViewById(R.id.dialog_date_input);
+        timeView = (TextView) v.findViewById(R.id.dialog_hour_input);
+
+        setDefaultDateTime();
+
+        dateView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+        timeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePickerDialog();
+            }
+        });
+
+
+        dialog.setTitle(item.getName());
+        dialog.setPositiveButton(DIALOG_ACCEPT_BUTTON, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        dialog.create();
+        dialog.show();
+    }
+
+    private void setDefaultDateTime() {
+
+        // Default is current time + 7 days
+        mDate = new Date();
+        mDate = new Date(mDate.getTime() + SEVEN_DAYS);
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(mDate);
+
+        setDateString(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
+                c.get(Calendar.DAY_OF_MONTH));
+
+        dateView.setText(dateString);
+
+        setTimeString(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
+                c.get(Calendar.MILLISECOND));
+
+        timeView.setText(timeString);
+    }
+
+    private static void setDateString(int year, int monthOfYear, int dayOfMonth) {
+
+        // Increment monthOfYear for Calendar/Date -> Time Format setting
+        monthOfYear++;
+        String mon = "" + monthOfYear;
+        String day = "" + dayOfMonth;
+
+        if (monthOfYear < 10)
+            mon = "0" + monthOfYear;
+        if (dayOfMonth < 10)
+            day = "0" + dayOfMonth;
+
+        dateString = year + "-" + mon + "-" + day;
+    }
+
+    private static void setTimeString(int hourOfDay, int minute, int mili) {
+        String hour = "" + hourOfDay;
+        String min = "" + minute;
+
+        if (hourOfDay < 10)
+            hour = "0" + hourOfDay;
+        if (minute < 10)
+            min = "0" + minute;
+
+        timeString = hour + ":" + min + ":00";
+    }
+
+    private void showDatePickerDialog() {
+        DialogFragment dialog = new DatePickerFragment();
+        dialog.show(getFragmentManager(),"datepicker");
+    }
+
+    private void showTimePickerDialog() {
+        DialogFragment dialog = new TimePickerFragment();
+        dialog.show(getFragmentManager(),"timepicker");
+    }
+
+
+
+    // DialogFragment used to pick a Activity deadline date
+    public static class DatePickerFragment extends DialogFragment implements
+            DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            // Use the current date as the default date in the picker
+
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            setDateString(year, monthOfYear, dayOfMonth);
+
+            dateView.setText(dateString);
+        }
+
+    }
+
+    // DialogFragment used to pick an Activity deadline time
+
+    public static class TimePickerFragment extends DialogFragment implements
+            TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    true);
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            setTimeString(hourOfDay, minute, 0);
+
+            timeView.setText(timeString);
+        }
+    }
 
 
 }

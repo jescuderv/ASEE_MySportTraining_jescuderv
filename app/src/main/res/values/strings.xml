@@ -87,4 +87,12 @@
     <string name="training_category_gym_weights">Pesas libres</string>
     <string name="training_category_strength">Fuerza</string>
     <string name="training_category_elongation">Estiramientos</string>
+
+    <!--DialogActivity-->
+    <string name="dialog_when">Cuándo</string>
+    <string name="dialog_duration">Hora</string>
+    <string name="dialog_when_icon">Icono cuándo</string>
+    <string name="dialog_duration_icon">Icono duración</string>
+    <string name="no_date_set_string">0000-00-00</string>
+    <string name="no_time_set_string">00:00:00</string>
 </resources>
