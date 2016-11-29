@@ -102,7 +102,7 @@ public class TrainingNewActivity extends AppCompatActivity {
         });
     }
 
-    // Add all training's exercises to array's adapter
+    // Add all training exercises to list adapter
     private void retrieveExercises(DataSnapshot dataSnapshot){
         Activity activity = dataSnapshot.getValue(Activity.class);
         mExerciseList.add(activity);
@@ -124,7 +124,7 @@ public class TrainingNewActivity extends AppCompatActivity {
                     // DIALOG //
     //========================================//
     private void exerciseDialog(Activity item){
-        // AlertDialog
+        // AlertDialog - SHow exercises details
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_input_exercise, null);

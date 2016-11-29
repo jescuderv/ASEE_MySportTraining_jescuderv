@@ -114,7 +114,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
         });
     }
 
-    // Add a exercise selected to array's adapter
+    // Add a exercise selected to list adapter
     private void addExercise(DataSnapshot dataSnapshot) {
         Activity activity = dataSnapshot.getValue(Activity.class);
         mExerciseList.add(activity);
@@ -137,7 +137,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
                     // DIALOG //
     //========================================//
     private void exerciseDialog(final Activity item) {
-        // AlertDialog
+        // AlertDialog - set info for an exercise
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_input_exercise, null);
