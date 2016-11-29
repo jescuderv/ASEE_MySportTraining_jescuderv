@@ -39,16 +39,17 @@ public class TrainingSelectActivity extends AppCompatActivity {
     private final static String CATEGORY = "category";
     private final static String DIALOG_ACCEPT_BUTTON = "Aceptar";
 
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mActivitiesRef;
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mActivitiesRef;
 
-    private String mCategory;
-    private Date mDate;
 
     private static String timeString;
     private static String dateString;
     private static TextView dateView;
     private static TextView timeView;
+
+    private String mCategory;
+    private Date mDate;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -60,8 +61,10 @@ public class TrainingSelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_select);
 
+        // Get exercises from firebase and set Adapter
         retrieveExerciseListFirebase();
 
+        // Get Recycler View
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_exercises_category);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -70,14 +73,19 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
     }
 
-
+    //========================================//
+            // RETRIEVE DATA FIREBASE //
+    //========================================//
     private void retrieveExerciseListFirebase() {
+        // Get category from intent extras
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             mCategory = (String) bundle.get(CATEGORY);
         }
+        //  Firebase ref: /root/activieties/"category"
         mActivitiesRef = mRootRef.child("activities").child(mCategory);
+        // Child event for get all activities from a category
         mActivitiesRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -106,8 +114,9 @@ public class TrainingSelectActivity extends AppCompatActivity {
         });
     }
 
-    private void addExercise(DataSnapshot ds) {
-        Activity activity = ds.getValue(Activity.class);
+    // Add a exercise selected to array's adapter
+    private void addExercise(DataSnapshot dataSnapshot) {
+        Activity activity = dataSnapshot.getValue(Activity.class);
         mExerciseList.add(activity);
 
         // Adapter
@@ -123,20 +132,30 @@ public class TrainingSelectActivity extends AppCompatActivity {
         }
     }
 
+
+    //========================================//
+                    // DIALOG //
+    //========================================//
     private void exerciseDialog(final Activity item) {
+        // AlertDialog
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_input_exercise, null);
         dialog.setView(v);
 
+        // Dialog-Score
         TextView scoreView = (TextView) v.findViewById(R.id.dialog_score);
-        scoreView.setText("Score: " + Integer.toString(item.getScore()));
+        String string = "Score: " + Integer.toString(item.getScore());
+        scoreView.setText(string);
 
+        // Dialog-date and Dialog-time
         dateView = (TextView) v.findViewById(R.id.dialog_date_input);
         timeView = (TextView) v.findViewById(R.id.dialog_hour_input);
 
+        // Set default time and date to dialog
         setDefaultDateTime();
 
+        // Show picker when click
         dateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,27 +169,37 @@ public class TrainingSelectActivity extends AppCompatActivity {
             }
         });
 
-
+        // Dialog-title
         dialog.setTitle(item.getName());
+        // Dialog-positive button ("aceptar")
         dialog.setPositiveButton(DIALOG_ACCEPT_BUTTON, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mActivitiesRef = mRootRef.child("exerciseList").child("idUsuarioPrueba").child("lista1");
+                // Firebase ref: /root/exerciseList/"user"/"exerciseList"
+                mActivitiesRef = mRootRef.child("exerciseList").child("idUsuarioPrueba").child("lista2");
                 item.setDate(dateString);
                 item.setHour(timeString);
+                // Add a new activity to Firebase ref
                 mActivitiesRef.push().setValue(item);
+                // Intent to Activity TrainingNewActivity
                 returnActivityNewTraining();
             }
         });
+
+        // Show dialog
         dialog.create();
         dialog.show();
     }
 
+    // Intent to Activity TrainingNewActivity
     private void returnActivityNewTraining(){
         Intent intent = new Intent(this, TrainingNewActivity.class);
         startActivity(intent);
     }
 
+    //========================================//
+            // DIALOG TIME AND DATE //
+    //========================================//
     private void setDefaultDateTime() {
 
         // Default is current time + 7 days
@@ -229,6 +258,9 @@ public class TrainingSelectActivity extends AppCompatActivity {
     }
 
 
+    //========================================//
+          // DIALOG FRAGMENT FOR PICKERS //
+    //========================================//
 
     // DialogFragment used to pick a Activity deadline date
     public static class DatePickerFragment extends DialogFragment implements
@@ -238,7 +270,6 @@ public class TrainingSelectActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
             // Use the current date as the default date in the picker
-
             final Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
@@ -259,7 +290,6 @@ public class TrainingSelectActivity extends AppCompatActivity {
     }
 
     // DialogFragment used to pick an Activity deadline time
-
     public static class TimePickerFragment extends DialogFragment implements
             TimePickerDialog.OnTimeSetListener {
 
