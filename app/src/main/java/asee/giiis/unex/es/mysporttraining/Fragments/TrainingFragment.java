@@ -1,8 +1,10 @@
 package asee.giiis.unex.es.mysporttraining.Fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +30,9 @@ import asee.giiis.unex.es.mysporttraining.TrainingNewActivity;
 
 public class TrainingFragment extends Fragment {
 
+    private static String DIALOG_ACCEPT_BUTTON = "ACEPTAR";
+    private static String DIALOG_CANCEL_BUTTON = "CANCELAR";
+
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private List<String> mTrainingList = new ArrayList<>();
@@ -36,7 +42,7 @@ public class TrainingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle saveshowdInstanceState) {
         View view = inflater.inflate(R.layout.fragment_training, container, false);
 
         // Get exercises from firebase and set Adapter
@@ -61,8 +67,29 @@ public class TrainingFragment extends Fragment {
     }
 
     // Intent to create a new Training
-    private void startCreateTraining(){
+    private void startCreateTraining() {
+        final EditText input = new EditText(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        // Add the buttons
+        builder.setPositiveButton(DIALOG_ACCEPT_BUTTON, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startCreateTrainingActivity(input.getText().toString());
+            }
+        });
+        builder.setNegativeButton(DIALOG_CANCEL_BUTTON, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        builder.setTitle("Nombre de entrenamiento");
+        builder.setView(input);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void startCreateTrainingActivity(String title){
         Intent intent = new Intent(getActivity(), TrainingNewActivity.class);
+        intent.putExtra("trainingTitle", title);
         startActivity(intent);
     }
 

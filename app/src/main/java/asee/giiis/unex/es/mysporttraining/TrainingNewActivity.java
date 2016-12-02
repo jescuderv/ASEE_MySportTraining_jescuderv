@@ -125,13 +125,13 @@ public class TrainingNewActivity extends AppCompatActivity {
     //========================================//
     private void exerciseDialog(Activity item){
         // AlertDialog - SHow exercises details
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_input_exercise, null);
-        dialog.setView(v);
+        builder.setView(v);
 
         // Dialog-title
-        dialog.setTitle(item.getName());
+        builder.setTitle(item.getName());
 
         // Dialog-score
         TextView scoreView = (TextView) v.findViewById(R.id.dialog_score);
@@ -145,14 +145,14 @@ public class TrainingNewActivity extends AppCompatActivity {
         timeView.setText(item.getHour());
 
         // Dialog OK button
-        dialog.setNegativeButton(DIALOG_OK_BUTTON, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(DIALOG_OK_BUTTON, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
 
-        dialog.create();
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
 

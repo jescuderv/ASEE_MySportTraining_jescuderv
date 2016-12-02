@@ -138,10 +138,10 @@ public class TrainingSelectActivity extends AppCompatActivity {
     //========================================//
     private void exerciseDialog(final Activity item) {
         // AlertDialog - set info for an exercise
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_input_exercise, null);
-        dialog.setView(v);
+        builder.setView(v);
 
         // Dialog-Score
         TextView scoreView = (TextView) v.findViewById(R.id.dialog_score);
@@ -170,9 +170,9 @@ public class TrainingSelectActivity extends AppCompatActivity {
         });
 
         // Dialog-title
-        dialog.setTitle(item.getName());
+        builder.setTitle(item.getName());
         // Dialog-positive button ("aceptar")
-        dialog.setPositiveButton(DIALOG_ACCEPT_BUTTON, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(DIALOG_ACCEPT_BUTTON, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Firebase ref: /root/exerciseList/"user"/"exerciseList"
@@ -187,7 +187,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
         });
 
         // Show dialog
-        dialog.create();
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
 
