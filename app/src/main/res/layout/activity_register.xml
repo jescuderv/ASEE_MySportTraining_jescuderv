@@ -187,7 +187,7 @@
             </fr.ganfra.materialspinner.MaterialSpinner>
 
             <fr.ganfra.materialspinner.MaterialSpinner
-                android:id="@+id/reg_spinner_weight_conditino"
+                android:id="@+id/reg_spinner_weight_condition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:ms_hint="@string/usr_physical_condition">
