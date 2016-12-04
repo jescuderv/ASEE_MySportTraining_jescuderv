@@ -38,6 +38,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
     private final static String CATEGORY = "category";
     private final static String DIALOG_ACCEPT_BUTTON = "Aceptar";
+    private final String TRAINING_NAME = "trainingTitle";
 
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mActivitiesRef;
@@ -50,6 +51,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
     private String mCategory;
     private Date mDate;
+    private String mTrainingName = "";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -77,11 +79,13 @@ public class TrainingSelectActivity extends AppCompatActivity {
             // RETRIEVE DATA FIREBASE //
     //========================================//
     private void retrieveExerciseListFirebase() {
+        mExerciseList.clear();
         // Get category from intent extras
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             mCategory = (String) bundle.get(CATEGORY);
+            mTrainingName = (String) bundle.get(TRAINING_NAME);
         }
         //  Firebase ref: /root/activieties/"category"
         mActivitiesRef = mRootRef.child("activities").child(mCategory);
@@ -175,8 +179,9 @@ public class TrainingSelectActivity extends AppCompatActivity {
         builder.setPositiveButton(DIALOG_ACCEPT_BUTTON, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // Add Exercise to Firebase
                 // Firebase ref: /root/exerciseList/"user"/"exerciseList"
-                mActivitiesRef = mRootRef.child("exerciseList").child("idUsuarioPrueba").child("lista2");
+                mActivitiesRef = mRootRef.child("exerciseList").child("idUsuarioPrueba").child(mTrainingName);
                 item.setDate(dateString);
                 item.setHour(timeString);
                 // Add a new activity to Firebase ref
@@ -194,6 +199,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
     // Intent to Activity TrainingNewActivity
     private void returnActivityNewTraining(){
         Intent intent = new Intent(this, TrainingNewActivity.class);
+        intent.putExtra(TRAINING_NAME, mTrainingName);
         startActivity(intent);
     }
 

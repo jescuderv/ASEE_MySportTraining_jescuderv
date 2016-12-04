@@ -9,6 +9,9 @@ import android.widget.TextView;
 public class TrainingSelectCategoryActivity extends AppCompatActivity {
 
     final static String CATEGORY = "category";
+    private final String TRAINING_NAME = "trainingTitle";
+
+    private String mTrainingName = "";
 
     private TextView mSportCategory;
     private TextView mCardioCategory;
@@ -23,6 +26,12 @@ public class TrainingSelectCategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_select_category);
 
+        Intent intentAux = getIntent();
+        Bundle bundle = intentAux.getExtras();
+        if (bundle != null) {
+            mTrainingName = (String) bundle.get(TRAINING_NAME);
+        }
+
         mSportCategory = (TextView) findViewById(R.id.training_category_sports);
         mCardioCategory = (TextView) findViewById(R.id.training_category_cardio);
         mCollectiveCategory = (TextView) findViewById(R.id.training_category_collective);
@@ -31,6 +40,7 @@ public class TrainingSelectCategoryActivity extends AppCompatActivity {
         mElongationCategory = (TextView) findViewById(R.id.training_category_elongation);
 
         final Intent intent = new Intent(this, TrainingSelectActivity.class);
+        intent.putExtra("trainingTitle", mTrainingName);
 
         mSportCategory.setOnClickListener(new View.OnClickListener() {
             @Override

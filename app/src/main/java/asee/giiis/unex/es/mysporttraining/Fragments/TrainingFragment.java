@@ -30,8 +30,8 @@ import asee.giiis.unex.es.mysporttraining.TrainingNewActivity;
 
 public class TrainingFragment extends Fragment {
 
-    private static String DIALOG_ACCEPT_BUTTON = "ACEPTAR";
-    private static String DIALOG_CANCEL_BUTTON = "CANCELAR";
+    private final String DIALOG_ACCEPT_BUTTON = "ACEPTAR";
+    private final String DIALOG_CANCEL_BUTTON = "CANCELAR";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -97,6 +97,7 @@ public class TrainingFragment extends Fragment {
             // RETRIEVE DATA FIREBASE //
     //========================================//
     private void retrieveTrainingListFirebase(){
+        mTrainingList.clear();
         // Firebase ref: /exerciseList/"user"
         mActivitiesRef = mRootRef.child("exerciseList").child("idUsuarioPrueba");
         // Child event for get all activities for a training

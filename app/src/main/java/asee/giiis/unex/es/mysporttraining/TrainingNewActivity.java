@@ -26,11 +26,14 @@ import asee.giiis.unex.es.mysporttraining.Objects.Activity;
 
 public class TrainingNewActivity extends AppCompatActivity {
 
-    private static String DIALOG_OK_BUTTON = "OK";
+    private final String DIALOG_OK_BUTTON = "OK";
+    private final String TRAINING_NAME = "trainingTitle";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private List<Activity> mExerciseList = new ArrayList<>();
+
+    private String mTrainingName = "";
 
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mActivitiesRef;
@@ -63,6 +66,7 @@ public class TrainingNewActivity extends AppCompatActivity {
     // Intent to select an exercise
     private void startTrainingSelectCategory(){
         Intent intent = new Intent(this, TrainingSelectCategoryActivity.class);
+        intent.putExtra("trainingTitle", mTrainingName);
         startActivity(intent);
     }
 
@@ -71,8 +75,15 @@ public class TrainingNewActivity extends AppCompatActivity {
             // RETRIEVE DATA FIREBASE //
     //========================================//
     private void retrieveExerciseListFirebase(){
+        mExerciseList.clear();
+        // Get training name from Intent
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            mTrainingName = (String) bundle.get(TRAINING_NAME);
+        }
         // Firebase ref: /exerciseList/"user"/"exerciseList"
-        mActivitiesRef = mRootRef.child("exerciseList").child("idUsuarioPrueba").child("lista2");
+        mActivitiesRef = mRootRef.child("exerciseList").child("idUsuarioPrueba").child(mTrainingName);
         // Child event for get all activities for a training
         mActivitiesRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -151,7 +162,6 @@ public class TrainingNewActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
         AlertDialog dialog = builder.create();
         dialog.show();
     }
