@@ -87,7 +87,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
             mCategory = (String) bundle.get(CATEGORY);
             mTrainingName = (String) bundle.get(TRAINING_NAME);
         }
-        //  Firebase ref: /root/activieties/"category"
+        //  Firebase ref: /root/activities/"category"
         mActivitiesRef = mRootRef.child("activities").child(mCategory);
         // Child event for get all activities from a category
         mActivitiesRef.addChildEventListener(new ChildEventListener() {

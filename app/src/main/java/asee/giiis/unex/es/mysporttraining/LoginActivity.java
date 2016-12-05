@@ -1,13 +1,14 @@
 package asee.giiis.unex.es.mysporttraining;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
 public class LoginActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +17,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // Focus for input disabled
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+
+
 
         Button loginButton = (Button) findViewById(R.id.log_login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -43,5 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
+
+
 
 }

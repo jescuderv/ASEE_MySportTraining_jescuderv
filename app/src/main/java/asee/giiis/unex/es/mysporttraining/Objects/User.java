@@ -32,6 +32,22 @@ public class User {
         this.weight = weight;
     }
 
+    public User(Integer age, String email, String firstName, Integer height, String lastName,
+                String password, String physicalCondition, Integer score, String sex, String username,
+                Integer weight) {
+        this.age = age;
+        this.email = email;
+        this.firstName = firstName;
+        this.height = height;
+        this.lastName = lastName;
+        this.password = password;
+        this.physicalCondition = physicalCondition;
+        this.score = score;
+        this.sex = sex;
+        this.username = username;
+        this.weight = weight;
+    }
+
     public Integer getAge() {
         return age;
     }
