@@ -1,5 +1,6 @@
 package asee.giiis.unex.es.mysporttraining;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -37,10 +39,6 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
     private static final String NAME_PATTERN = "[^0-9]+";
 
-
-    // FirebaseAuth object
-    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-
     // Our own user
     private User mUser;
     private String mCond, mSex; // Variable for spinner
@@ -49,6 +47,10 @@ public class RegisterActivity extends AppCompatActivity {
     // Reference root JSON database
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mUsersRef = mRootRef.child("users");
+    // FirebaseAuth Object
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    // FirebaseStorage Reference
+    private StorageReference mStorageImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private void startMainActivity(){
+    private void startLoginActivity(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
@@ -136,6 +138,7 @@ public class RegisterActivity extends AppCompatActivity {
     //========================================//
 
     private void registerUser(){
+        // boolean to detect any error
         boolean error = false;
 
         // Get from Activity input
@@ -227,6 +230,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Create a new user with data input
         if (!error) {
+            // Dialog with progres waiting to register user
+            final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this);
+            progressDialog.setMessage("Registrando usuario, espere por favor...");
+            progressDialog.show();
             // First, register email and password if there aren't errors
             mFirebaseAuth.createUserWithEmailAndPassword(usrEmail, usrPasswrod)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -240,6 +247,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if (task.isSuccessful()) {
+
                                                     // Set values for new user register
                                                     mUser = new User(Integer.parseInt(usrAge), usrEmail, usrFirstname,
                                                             Integer.parseInt(usrHeight), usrLastname,
@@ -253,8 +261,14 @@ public class RegisterActivity extends AppCompatActivity {
                                                     if (user != null) {
                                                         mUsersRef.child(user.getUid()).setValue(mUser);
                                                     }
-                                                    // Start MainActivity
-                                                    startMainActivity();
+                                                    // SignOut
+                                                    mFirebaseAuth.signOut();
+                                                    // Dismiss progress
+                                                    progressDialog.dismiss();
+                                                    Toast.makeText(RegisterActivity.this, "Usuario registrado correctamente",
+                                                            Toast.LENGTH_SHORT).show();
+                                                    // Start Login Activity
+                                                    startLoginActivity();
                                                 }
                                             }
                                         });
@@ -330,7 +344,23 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK){
-            Uri uri = data.getData();
+            final Uri uri = data.getData();
+
+//            StorageReference filepath = mStorageImage.child("photos");
+//            UploadTask uploadTask = filepath.putFile(uri);
+//            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                    try {
+//                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+//
+//                        CircleImageView imageProfile = (CircleImageView) findViewById(R.id.reg_usr_profile_image);
+//                        imageProfile.setImageBitmap(bitmap);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
             try{
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
 

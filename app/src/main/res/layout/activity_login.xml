@@ -10,29 +10,29 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="asee.giiis.unex.es.mysporttraining.LoginActivity" >
+    tools:context="asee.giiis.unex.es.mysporttraining.LoginActivity">
 
     <ImageView
         android:id="@+id/log_logo_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         android:contentDescription="@string/logo"
-        app:srcCompat="@drawable/logo"
-        android:layout_weight="1"/>
+        app:srcCompat="@drawable/logo" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/log_input_layout_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/log_usr_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="11"
-        android:hint="@string/usr_email"
-        android:layout_gravity="center" />
+        <EditText
+            android:id="@+id/log_usr_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ems="11"
+            android:hint="@string/usr_email"
+            android:inputType="textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -40,29 +40,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/log_usr_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="11"
-        android:hint="@string/usr_password"
-        android:layout_gravity="center"/>
+        <EditText
+            android:id="@+id/log_usr_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ems="11"
+            android:hint="@string/usr_password"
+            android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/log_login_button"
-        android:text="@string/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:text="@string/loginButton" />
 
     <Button
         android:id="@+id/log_register_button"
-        android:text="@string/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:text="@string/registerButton" />
 
 </LinearLayout>
 

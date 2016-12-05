@@ -2,10 +2,8 @@ package asee.giiis.unex.es.mysporttraining;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,7 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
+import android.view.View;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import asee.giiis.unex.es.mysporttraining.Fragments.ActivityFragment;
 import asee.giiis.unex.es.mysporttraining.Fragments.CalendarFragment;
@@ -25,6 +26,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    // FirebaseAuth Object
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +123,14 @@ public class MainActivity extends AppCompatActivity
                 setFragment(5);
                 optionSelected = true;
                 break;
+            case R.id.nav_logout:
+                if (mFirebaseAuth.getCurrentUser() != null){
+                    mFirebaseAuth.signOut();
+                    finish();
+                    startLoginctivity();
+                    Toast.makeText(this, "Usuario desconectado", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
 
         if (optionSelected) {
@@ -171,6 +183,11 @@ public class MainActivity extends AppCompatActivity
 
     private void startUserProfileActivity() {
         Intent intent = new Intent(this, UserProfileActivity.class);
+        startActivity(intent);
+    }
+
+    private void startLoginctivity(){
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
