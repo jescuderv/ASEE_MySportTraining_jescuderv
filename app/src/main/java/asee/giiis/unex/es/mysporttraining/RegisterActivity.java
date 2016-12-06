@@ -123,8 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private void startLoginActivity(){                                                 // SignOut
-       // mFirebaseAuth.signOut();
+    private void startLoginActivity(){
         Toast.makeText(RegisterActivity.this, "Usuario registrado correctamente",
                 Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LoginActivity.class);
