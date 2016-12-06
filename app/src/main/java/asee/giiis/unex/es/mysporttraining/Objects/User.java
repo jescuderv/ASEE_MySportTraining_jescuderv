@@ -14,13 +14,14 @@ public class User {
     private String sex;
     private String username;
     private Integer weight;
+    private String uriImageProfile;
 
     public User() {
 
     }
 
     public User(Integer age, String email, String firstName, Integer height, String lastName,
-                String password, Integer score, String username, Integer weight) {
+                String password, Integer score, String username, Integer weight, String uriImageProfile) {
         this.age = age;
         this.email = email;
         this.firstName = firstName;
@@ -30,11 +31,12 @@ public class User {
         this.score = score;
         this.username = username;
         this.weight = weight;
+        this.uriImageProfile = uriImageProfile;
     }
 
     public User(Integer age, String email, String firstName, Integer height, String lastName,
                 String password, String physicalCondition, Integer score, String sex, String username,
-                Integer weight) {
+                Integer weight, String uriImageProfile) {
         this.age = age;
         this.email = email;
         this.firstName = firstName;
@@ -46,6 +48,7 @@ public class User {
         this.sex = sex;
         this.username = username;
         this.weight = weight;
+        this.uriImageProfile = uriImageProfile;
     }
 
     public Integer getAge() {
@@ -136,6 +139,11 @@ public class User {
         this.weight = weight;
     }
 
+    public String getUriImageProfile() {
+        return uriImageProfile;
+    }
 
-
+    public void setUriImageProfile(String uriImageProfile) {
+        this.uriImageProfile = uriImageProfile;
+    }
 }

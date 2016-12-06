@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="asee.giiis.unex.es.mysporttraining">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -38,7 +38,7 @@
         <activity android:name=".ResultsMapActivity" />
         <activity android:name=".TrainingNewActivity" />
         <activity android:name=".TrainingSelectCategoryActivity" />
-        <activity android:name=".TrainingSelectActivity"></activity>
+        <activity android:name=".TrainingSelectActivity" />
     </application>
 
 </manifest>

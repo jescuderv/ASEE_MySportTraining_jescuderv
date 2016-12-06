@@ -2,10 +2,7 @@ package asee.giiis.unex.es.mysporttraining;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -23,26 +20,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import asee.giiis.unex.es.mysporttraining.Objects.User;
-import de.hdodenhof.circleimageview.CircleImageView;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private static final int REQUEST_IMAGE_GET = 1;
+    // private static final int REQUEST_IMAGE_GET = 1;
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
     private static final String NAME_PATTERN = "[^0-9]+";
 
     // Our own user
     private User mUser;
     private String mCond, mSex; // Variable for spinner
-
+//    private String mProfileImageUrl;
 
     // Reference root JSON database
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -50,7 +44,9 @@ public class RegisterActivity extends AppCompatActivity {
     // FirebaseAuth Object
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     // FirebaseStorage Reference
-    private StorageReference mStorageImage;
+//    private StorageReference mStorageImage = FirebaseStorage.getInstance().getReference();
+//    private Uri mFilePath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +57,15 @@ public class RegisterActivity extends AppCompatActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
 
-        // ===== IMAGE PROFILE ==== //
-
-        CircleImageView imageProfile = (CircleImageView) findViewById(R.id.reg_usr_profile_image);
-        imageProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startGetImageProfile();
-            }
-        });
+//        // ===== IMAGE PROFILE ==== //
+//
+//        CircleImageView imageProfile = (CircleImageView) findViewById(R.id.reg_usr_profile_image);
+//        imageProfile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startGetImageProfile();
+//            }
+//        });
 
 
         // ===== SPINNERS ==== //
@@ -80,6 +76,18 @@ public class RegisterActivity extends AppCompatActivity {
         adapterSex.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         MaterialSpinner spinnerSex = (MaterialSpinner) findViewById(R.id.reg_spinner_sex);
         spinnerSex.setAdapter(adapterSex);
+
+        spinnerSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mSex = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(parent.getContext(), "Faltan algunos campos por rellenar", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         // Adapter for spinner weight condition (take array from resources)
@@ -93,17 +101,6 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mCond = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(parent.getContext(), "Faltan algunos campos por rellenar", Toast.LENGTH_SHORT).show();
-            }
-        });
-        spinnerSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSex = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -126,7 +123,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private void startLoginActivity(){
+    private void startLoginActivity(){                                                 // SignOut
+       // mFirebaseAuth.signOut();
+        Toast.makeText(RegisterActivity.this, "Usuario registrado correctamente",
+                Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
@@ -155,7 +155,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String usrEmail = email.getEditText().getText().toString();
 
         TextInputLayout password = (TextInputLayout) findViewById(R.id.reg_input_layout_password);
-        final String usrPasswrod = password.getEditText().getText().toString();
+        final String usrPassword = password.getEditText().getText().toString();
 
         TextInputLayout height = (TextInputLayout) findViewById(R.id.reg_input_layout_height);
         final String usrHeight = height.getEditText().getText().toString();
@@ -169,7 +169,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Check null
         if (usrUsername.isEmpty() || usrFirstname.isEmpty() || usrLastname.isEmpty() ||
-                usrEmail.isEmpty() || usrPasswrod.isEmpty() || usrHeight.isEmpty()
+                usrEmail.isEmpty() || usrPassword.isEmpty() || usrHeight.isEmpty()
                 || usrWeight.isEmpty() || usrAge.isEmpty() || mSex.equals("Sexo") || mCond.equals("Condición física")){
             error = true;
             Toast.makeText(this, "Faltan algunos campos por rellenar", Toast.LENGTH_SHORT).show();
@@ -203,7 +203,7 @@ public class RegisterActivity extends AppCompatActivity {
                 error = true;
             } else { email.setErrorEnabled(false); }
             // password
-            if (!checkLenght(usrPasswrod)){
+            if (!checkLenght(usrPassword)){
                 password.setErrorEnabled(true);
                 password.setError("Introduce al menos 5 caracteres");
                 error = true;
@@ -231,42 +231,36 @@ public class RegisterActivity extends AppCompatActivity {
         // Create a new user with data input
         if (!error) {
             // Dialog with progres waiting to register user
-            final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this);
+            final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Registrando usuario, espere por favor...");
             progressDialog.show();
             // First, register email and password if there aren't errors
-            mFirebaseAuth.createUserWithEmailAndPassword(usrEmail, usrPasswrod)
+            mFirebaseAuth.createUserWithEmailAndPassword(usrEmail, usrPassword)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             // If don't exit email in database previously
                             if (task.isSuccessful()) {
                                 // SignIn with new email and password user
-                                mFirebaseAuth.signInWithEmailAndPassword(usrEmail, usrPasswrod)
+                                mFirebaseAuth.signInWithEmailAndPassword(usrEmail, usrPassword)
                                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if (task.isSuccessful()) {
-
                                                     // Set values for new user register
                                                     mUser = new User(Integer.parseInt(usrAge), usrEmail, usrFirstname,
                                                             Integer.parseInt(usrHeight), usrLastname,
-                                                            usrPasswrod, 0, usrUsername, Integer.parseInt(usrWeight));
+                                                            usrPassword, 0, usrUsername, Integer.parseInt(usrWeight), "default");
                                                     mUser.setSex(mSex);
                                                     mUser.setPhysicalCondition(mCond);
 
                                                     // Get FirebaseUser reference (just created)
                                                     FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                                                    String a = user.getUid();
                                                     // Insert into Firebase databases: /root/users/"new user"
                                                     if (user != null) {
                                                         mUsersRef.child(user.getUid()).setValue(mUser);
                                                     }
-                                                    // SignOut
-                                                    mFirebaseAuth.signOut();
-                                                    // Dismiss progress
-                                                    progressDialog.dismiss();
-                                                    Toast.makeText(RegisterActivity.this, "Usuario registrado correctamente",
-                                                            Toast.LENGTH_SHORT).show();
                                                     // Start Login Activity
                                                     startLoginActivity();
                                                 }
@@ -277,10 +271,12 @@ public class RegisterActivity extends AppCompatActivity {
                                 Toast.makeText(RegisterActivity.this, "Usuario ya existente",
                                         Toast.LENGTH_SHORT).show();
                             }
+                            // Dismiss progress
+                            progressDialog.dismiss();
                         }
                     });
-        }
 
+        }
     }
 
 
@@ -290,7 +286,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Check Length for username and password
     private boolean checkLenght(String username){
-        return username.length() > 5;
+        return username.length() > 6;
     }
 
     // Check name for firstname and lastname
@@ -327,49 +323,77 @@ public class RegisterActivity extends AppCompatActivity {
         return ageAux < 120 && ageAux > 0;
     }
 
-
-
-    //========================================//
-            // SET IMAGE PROFILE //
-    //========================================//
-
-    private void startGetImageProfile(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        if (intent.resolveActivity(getPackageManager()) != null){
-            startActivityForResult(intent, REQUEST_IMAGE_GET);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK){
-            final Uri uri = data.getData();
-
-//            StorageReference filepath = mStorageImage.child("photos");
-//            UploadTask uploadTask = filepath.putFile(uri);
-//            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                    try {
-//                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
 //
-//                        CircleImageView imageProfile = (CircleImageView) findViewById(R.id.reg_usr_profile_image);
-//                        imageProfile.setImageBitmap(bitmap);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-            try{
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
-
-                CircleImageView imageProfile = (CircleImageView) findViewById(R.id.reg_usr_profile_image);
-                imageProfile.setImageBitmap(bitmap);
-            } catch(IOException e){
-                e.printStackTrace();
-            }
-        }
-    }
-
+//
+//    //========================================//
+//            // SET IMAGE PROFILE //
+//    //========================================//
+//
+//    private void startGetImageProfile(){
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.setType("image/*");
+//        if (intent.resolveActivity(getPackageManager()) != null){
+//            startActivityForResult(intent, REQUEST_IMAGE_GET);
+//        }
+//    }
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK){
+//            mFilePath = data.getData();
+//
+//            try{
+//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),mFilePath);
+//
+//                CircleImageView imageProfile = (CircleImageView) findViewById(R.id.reg_usr_profile_image);
+//                imageProfile.setImageBitmap(bitmap);
+//            } catch(IOException e){
+//                e.printStackTrace();
+//            }
+//        }
+//        uploadFile();
+//    }
+//
+//    private void uploadFile() {
+//
+//        if (mFilePath != null) {
+//            final ProgressDialog progressDialog = new ProgressDialog(this);
+//            progressDialog.setTitle("Subiendo imagen...");
+//            progressDialog.show();
+//
+//            StorageReference storageReference = mStorageImage.child("images/profile.jpg");
+//            storageReference.putFile(mFilePath)
+//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            progressDialog.dismiss();
+//                            Toast.makeText(RegisterActivity.this, "Imagen subida", Toast.LENGTH_SHORT).show();
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            progressDialog.dismiss();
+//                            Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    })
+//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            double progress =
+//                                    (100.0 * taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+//                            progressDialog.setMessage((int) progress + "% subido");
+//                        }
+//                    });
+//            storageReference.getDownloadUrl()
+//                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                        @Override
+//                        public void onSuccess(Uri uri) {
+//                            mProfileImageUrl = uri.toString();
+//                        }
+//                    });
+//        } else{
+//            Toast.makeText(this, "Error en la subida de imagen", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 }

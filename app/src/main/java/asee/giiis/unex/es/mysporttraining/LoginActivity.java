@@ -91,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                             // if task is succesfull
                             if (task.isSuccessful()) {
                                 // Dismiss progress
-                                progressDialog.dismiss();
                                 Toast.makeText(LoginActivity.this, "Sesión iniciada",
                                         Toast.LENGTH_SHORT).show();
                                 // Start MainActivity
@@ -100,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Usuario o contraseña incorrectos",
                                         Toast.LENGTH_SHORT).show();
                             }
+                            progressDialog.dismiss();
                         }
                     });
         }
