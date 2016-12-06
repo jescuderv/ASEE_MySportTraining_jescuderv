@@ -29,23 +29,19 @@ import fr.ganfra.materialspinner.MaterialSpinner;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    // private static final int REQUEST_IMAGE_GET = 1;
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
     private static final String NAME_PATTERN = "[^0-9]+";
 
     // Our own user
     private User mUser;
     private String mCond, mSex; // Variable for spinner
-//    private String mProfileImageUrl;
 
     // Reference root JSON database
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mUsersRef = mRootRef.child("users");
     // FirebaseAuth Object
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-    // FirebaseStorage Reference
-//    private StorageReference mStorageImage = FirebaseStorage.getInstance().getReference();
-//    private Uri mFilePath;
+
 
 
     @Override
@@ -55,17 +51,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Focus for input disabled
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-
-//        // ===== IMAGE PROFILE ==== //
-//
-//        CircleImageView imageProfile = (CircleImageView) findViewById(R.id.reg_usr_profile_image);
-//        imageProfile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startGetImageProfile();
-//            }
-//        });
 
 
         // ===== SPINNERS ==== //
@@ -322,77 +307,4 @@ public class RegisterActivity extends AppCompatActivity {
         return ageAux < 120 && ageAux > 0;
     }
 
-//
-//
-//    //========================================//
-//            // SET IMAGE PROFILE //
-//    //========================================//
-//
-//    private void startGetImageProfile(){
-//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//        intent.setType("image/*");
-//        if (intent.resolveActivity(getPackageManager()) != null){
-//            startActivityForResult(intent, REQUEST_IMAGE_GET);
-//        }
-//    }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK){
-//            mFilePath = data.getData();
-//
-//            try{
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),mFilePath);
-//
-//                CircleImageView imageProfile = (CircleImageView) findViewById(R.id.reg_usr_profile_image);
-//                imageProfile.setImageBitmap(bitmap);
-//            } catch(IOException e){
-//                e.printStackTrace();
-//            }
-//        }
-//        uploadFile();
-//    }
-//
-//    private void uploadFile() {
-//
-//        if (mFilePath != null) {
-//            final ProgressDialog progressDialog = new ProgressDialog(this);
-//            progressDialog.setTitle("Subiendo imagen...");
-//            progressDialog.show();
-//
-//            StorageReference storageReference = mStorageImage.child("images/profile.jpg");
-//            storageReference.putFile(mFilePath)
-//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                            progressDialog.dismiss();
-//                            Toast.makeText(RegisterActivity.this, "Imagen subida", Toast.LENGTH_SHORT).show();
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            progressDialog.dismiss();
-//                            Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    })
-//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                            double progress =
-//                                    (100.0 * taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
-//                            progressDialog.setMessage((int) progress + "% subido");
-//                        }
-//                    });
-//            storageReference.getDownloadUrl()
-//                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                        @Override
-//                        public void onSuccess(Uri uri) {
-//                            mProfileImageUrl = uri.toString();
-//                        }
-//                    });
-//        } else{
-//            Toast.makeText(this, "Error en la subida de imagen", Toast.LENGTH_SHORT).show();
-//        }
-//    }
 }

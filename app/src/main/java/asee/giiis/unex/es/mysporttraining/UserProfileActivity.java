@@ -1,10 +1,19 @@
 package asee.giiis.unex.es.mysporttraining;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -12,11 +21,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import asee.giiis.unex.es.mysporttraining.Objects.User;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class UserProfileActivity extends AppCompatActivity {
+
+    private static final int REQUEST_IMAGE_GET = 1;
 
     // Reference root JSON database
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -25,6 +46,9 @@ public class UserProfileActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     // Firebase User
     FirebaseUser mUser = mFirebaseAuth.getCurrentUser();
+    // FirebaseStorage Reference
+    private StorageReference mStorageImage = FirebaseStorage.getInstance().getReference();
+    private Uri mFilePath;
 
     // Reference from layout
     private TextView mUsername;
@@ -37,6 +61,8 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView mAge;
     private TextView mSex;
     private TextView mPhysicalCondition;
+    private CircleImageView mImageProfile;
+
 
 
     @Override
@@ -46,7 +72,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         if (mUser != null) {
             // Retrieve user from Firebase: /root/users/"userID"
-            mUsersRef =  mRootRef.child("users").child(mUser.getUid());
+            mUsersRef = mRootRef.child("users").child(mUser.getUid());
 
             mUsername = (TextView) findViewById(R.id.usr_prof_username);
             mScore = (TextView) findViewById(R.id.usr_prof_score);
@@ -58,7 +84,19 @@ public class UserProfileActivity extends AppCompatActivity {
             mAge = (TextView) findViewById(R.id.usr_prof_age_value);
             mSex = (TextView) findViewById(R.id.usr_prof_sex_value);
             mPhysicalCondition = (TextView) findViewById(R.id.usr_prof_physical_condition_value);
-        } else{
+
+
+            // ===== IMAGE PROFILE ==== //
+
+            mImageProfile = (CircleImageView) findViewById(R.id.usr_prof_profile_image);
+            mImageProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startGetImageProfile();
+                }
+            });
+
+        } else {
             Toast.makeText(this, "Error en la recuperación del usuario de la base de" +
                     " datos", Toast.LENGTH_SHORT).show();
         }
@@ -68,28 +106,127 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // Get user information profile and show
-        mUsersRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
+        if (mUser != null) {
+            // Get user information profile and show
+            mUsersRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // Get user data
+                    User user = dataSnapshot.getValue(User.class);
 
-                mUsername.setText(user.getUsername());
-                mScore.setText(user.getScore().toString());
-                mFirstName.setText(user.getFirstName());
-                mLastName.setText(user.getLastName());
-                mEmail.setText(user.getEmail());
-                mHeight.setText(user.getHeight().toString());
-                mWeight.setText(user.getWeight().toString());
-                mAge.setText(user.getAge().toString());
-                mSex.setText(user.getSex());
-                mPhysicalCondition.setText(user.getPhysicalCondition());
+                    mUsername.setText(user.getUsername());
+                    mScore.setText(user.getScore().toString());
+                    mFirstName.setText(user.getFirstName());
+                    mLastName.setText(user.getLastName());
+                    mEmail.setText(user.getEmail());
+                    mHeight.setText(user.getHeight().toString());
+                    mWeight.setText(user.getWeight().toString());
+                    mAge.setText(user.getAge().toString());
+                    mSex.setText(user.getSex());
+                    mPhysicalCondition.setText(user.getPhysicalCondition());
+
+                    // If image profile URL don't is default
+                    if (!user.getUriImageProfile().equals("default")) {
+                        // Picasso library to get image from URL profile image user
+                        Picasso.with(UserProfileActivity.this).load(user.getUriImageProfile()).into(mImageProfile);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+
+    //========================================//
+                // SET IMAGE PROFILE //
+    //========================================//
+
+    private void startGetImageProfile() {
+        // Intent to get image from storage
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_IMAGE_GET);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
+            // If activity result is OK, then get file uri
+            mFilePath = data.getData();
+
+            try {
+                // Get bitmap from uri
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mFilePath);
+
+                // Set image in profile circleview
+                CircleImageView imageProfile = (CircleImageView) findViewById(R.id.usr_prof_profile_image);
+                imageProfile.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        }
+        uploadFile();
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+    // Upload file to Firebase storage
+    private void uploadFile() {
 
-            }
-        });
+        if (mFilePath != null && mUser != null) {
+            // Progress dialog
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Subiendo imagen...");
+            progressDialog.show();
+
+            // Reference to Firebase storage. Save as "uID+profile.jpg"
+            StorageReference storageReference = mStorageImage.child("images/" + mUser.getUid() + "profile.jpg");
+            storageReference.putFile(mFilePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(UserProfileActivity.this, "Imagen subida correctamente",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(UserProfileActivity.this, e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress =
+                                    (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            progressDialog.setMessage((int) progress + "% completado");
+                        }
+                    });
+            // get download url and set as user property
+            storageReference.getDownloadUrl()
+                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            if (mUser != null) {
+                                // Retrieve user from Firebase: /root/users/"userID"
+                                mUsersRef = mRootRef.child("users").child(mUser.getUid());
+                                // New map to set URL download
+                                Map<String, Object> taskMap = new HashMap<>();
+                                taskMap.put("uriImageProfile", uri.toString());
+                                mUsersRef.updateChildren(taskMap);
+                            }
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "Error en la subida de imagen", Toast.LENGTH_SHORT).show();
+        }
     }
 }
