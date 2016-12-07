@@ -199,6 +199,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
                     mActivitiesRef = mRootRef.child("exerciseList").child(mUser.getUid()).child(mTrainingName);
                     item.setDate(dateString);
                     item.setHour(timeString);
+                    item.setCategory(parseCategory());
                     // Add a new activity to Firebase ref
                     mActivitiesRef.push().setValue(item);
 
@@ -350,4 +351,25 @@ public class TrainingSelectActivity extends AppCompatActivity {
     }
 
 
+    //========================================//
+        // PARSE CATEGORY TO SHOW USER //
+    //========================================//
+
+    private String parseCategory(){
+        switch (mCategory){
+            case "cardio":
+                return "Cardio";
+            case "collective":
+                return "Colectiva";
+            case "elongation":
+                return "Estiramiento";
+            case "gym_weights":
+                return "Pesas";
+            case "sports":
+                return "Deporte";
+            case "strength":
+                return "Fuerza";
+        }
+        return null;
+    }
 }

@@ -6,6 +6,7 @@ public class Activity {
     private Integer score;
     private String date;
     private String hour;
+    private String category;
 
 
     public Activity(){
@@ -49,6 +50,11 @@ public class Activity {
         this.hour = hour;
     }
 
+    public String getCategory() {
+        return category;
+    }
 
-
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }
