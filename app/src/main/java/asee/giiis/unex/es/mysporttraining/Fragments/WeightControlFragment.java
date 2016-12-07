@@ -20,8 +20,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import asee.giiis.unex.es.mysporttraining.Adapters.WeightControlAdapter;
 import asee.giiis.unex.es.mysporttraining.R;
 
 public class WeightControlFragment extends Fragment {
@@ -44,7 +48,6 @@ public class WeightControlFragment extends Fragment {
     // DatabaseReference Firebase
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mWeightControlRef;
-    private DatabaseReference mUsersRef;
 
     // FirebaseAuth Object
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
@@ -90,16 +93,43 @@ public class WeightControlFragment extends Fragment {
 
 
     //========================================//
-    // RETRIEVE DATA FIREBASE //
+            // RETRIEVE DATA FIREBASE //
     //========================================//
 
     private void retrieveDataFirebase() {
+        if (mUser != null){
+            mWeightControlRef = mRootRef.child("weightControl").child(mUser.getUid());
+            mWeightControlRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    getInfoWeightControl(dataSnapshot);
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    private void getInfoWeightControl(DataSnapshot dataSnapshot) {
+        mWeightList.clear();
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            Map<String, String> weightControl = (Map<String, String>) ds.getValue();
+            mWeightList.add(weightControl);
+
+            // Adapter
+            if (mWeightList.size() > 0) {
+                mAdapter = new WeightControlAdapter(getContext(), mWeightList);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+        }
     }
 
 
     //========================================//
-    // DIALOG - ADD DATA TO FIREBASE //
+        // DIALOG - ADD DATA TO FIREBASE //
     //========================================//
 
     private void addWeightInfo() {
@@ -141,7 +171,7 @@ public class WeightControlFragment extends Fragment {
                                 error = true;
                             }
                             if (!error) {
-                                Map<String, String> map = new HashMap<String, String>();
+                                Map<String, String> map = new HashMap<>();
                                 map.put(MAP_WEIGHT, weightData);
                                 map.put(MAP_DATE, dateString);
                                 mWeightList.add(map);
@@ -169,7 +199,7 @@ public class WeightControlFragment extends Fragment {
 
 
     //========================================//
-    // DIALOG DATE //
+                // DIALOG DATE //
     //========================================//
 
     private void setDefaultDate() {
@@ -207,7 +237,7 @@ public class WeightControlFragment extends Fragment {
 
 
 //========================================//
-// DIALOG FRAGMENT FOR PICKERS //
+    // DIALOG FRAGMENT FOR PICKERS //
 //========================================//
 
     // DialogFragment used to pick a Activity deadline date

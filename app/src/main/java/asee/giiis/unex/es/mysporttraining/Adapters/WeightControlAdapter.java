@@ -61,8 +61,8 @@ public class WeightControlAdapter extends RecyclerView.Adapter<WeightControlAdap
 
         public void bind (Map<String, String> weightControl){
             // Display each item in layout
-            date.setText(weightControl.get("date"));
-            weight.setText(weightControl.get("weight"));
+            date.setText("Fecha: " + weightControl.get("date"));
+            weight.setText("Peso: " + weightControl.get("weight") + " kg");
 
         }
     }
