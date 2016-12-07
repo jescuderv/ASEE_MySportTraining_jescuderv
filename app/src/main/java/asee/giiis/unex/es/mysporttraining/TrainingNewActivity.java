@@ -171,7 +171,7 @@ public class TrainingNewActivity extends AppCompatActivity {
 
         // Dialog-score
         TextView scoreView = (TextView) v.findViewById(R.id.dialog_score);
-        String string = "Score: " + Integer.toString(item.getScore());
+        String string = "+ " + Integer.toString(item.getScore()) + " puntos";
         scoreView.setText(string);
 
         // Dialog-date and Dialog-time

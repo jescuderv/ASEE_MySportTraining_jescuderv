@@ -115,7 +115,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     User user = dataSnapshot.getValue(User.class);
 
                     mUsername.setText(user.getUsername());
-                    mScore.setText(user.getScore().toString());
+                    mScore.setText(user.getScore().toString() + " puntos");
                     mFirstName.setText(user.getFirstName());
                     mLastName.setText(user.getLastName());
                     mEmail.setText(user.getEmail());

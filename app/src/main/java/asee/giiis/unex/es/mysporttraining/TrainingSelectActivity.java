@@ -38,9 +38,6 @@ import asee.giiis.unex.es.mysporttraining.Objects.User;
 
 public class TrainingSelectActivity extends AppCompatActivity {
 
-    // 7 days in milliseconds - 7 * 24 * 60 * 60 * 1000
-    private static final int SEVEN_DAYS = 604800000;
-
     private final static String CATEGORY = "category";
     private final static String DIALOG_ACCEPT_BUTTON = "Aceptar";
     private final static String TRAINING_NAME = "trainingTitle";
@@ -163,7 +160,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
         // Dialog-Score
         TextView scoreView = (TextView) v.findViewById(R.id.dialog_score);
-        String string = "Score: " + Integer.toString(item.getScore());
+        String string = "+ " + Integer.toString(item.getScore()) + " puntos";
         scoreView.setText(string);
 
         // Dialog-date and Dialog-time
@@ -246,9 +243,9 @@ public class TrainingSelectActivity extends AppCompatActivity {
             // DIALOG TIME AND DATE //
     //========================================//
     private void setDefaultDateTime() {
-        // Default is current time + 7 days
+        // Default is current time
         mDate = new Date();
-        mDate = new Date(mDate.getTime() + SEVEN_DAYS);
+        mDate = new Date(mDate.getTime());
 
         Calendar c = Calendar.getInstance();
         c.setTime(mDate);
