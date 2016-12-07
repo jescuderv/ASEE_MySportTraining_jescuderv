@@ -17,11 +17,15 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +34,7 @@ import java.util.List;
 
 import asee.giiis.unex.es.mysporttraining.Adapters.TrainingSelectActivityAdapter;
 import asee.giiis.unex.es.mysporttraining.Objects.Activity;
+import asee.giiis.unex.es.mysporttraining.Objects.User;
 
 public class TrainingSelectActivity extends AppCompatActivity {
 
@@ -38,12 +43,19 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
     private final static String CATEGORY = "category";
     private final static String DIALOG_ACCEPT_BUTTON = "Aceptar";
-    private final String TRAINING_NAME = "trainingTitle";
+    private final static String TRAINING_NAME = "trainingTitle";
 
+    // DatabaseReference Firebase
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mActivitiesRef;
+    private DatabaseReference mUsersRef;
 
+    // FirebaseAuth Object
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    // Firebase User
+    FirebaseUser mUser = mFirebaseAuth.getCurrentUser();
 
+    // Static variables for time and date
     private static String timeString;
     private static String dateString;
     private static TextView dateView;
@@ -51,8 +63,10 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
     private String mCategory;
     private Date mDate;
+    private Integer mScore;
     private String mTrainingName = "";
 
+    // RecyclerView
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private List<Activity> mExerciseList = new ArrayList<>();
@@ -179,15 +193,39 @@ public class TrainingSelectActivity extends AppCompatActivity {
         builder.setPositiveButton(DIALOG_ACCEPT_BUTTON, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Add Exercise to Firebase
-                // Firebase ref: /root/exerciseList/"user"/"exerciseList"
-                mActivitiesRef = mRootRef.child("exerciseList").child("idUsuarioPrueba").child(mTrainingName);
-                item.setDate(dateString);
-                item.setHour(timeString);
-                // Add a new activity to Firebase ref
-                mActivitiesRef.push().setValue(item);
-                // Intent to Activity TrainingNewActivity
-                returnActivityNewTraining();
+                if (mUser != null) {
+                    // Add Exercise to Firebase
+                    // Firebase ref: /root/exerciseList/"user"/"exerciseList"
+                    mActivitiesRef = mRootRef.child("exerciseList").child(mUser.getUid()).child(mTrainingName);
+                    item.setDate(dateString);
+                    item.setHour(timeString);
+                    // Add a new activity to Firebase ref
+                    mActivitiesRef.push().setValue(item);
+
+                    // Update user SCORE
+                    // Firebase ref: /root/users/"user"
+                    mUsersRef = mRootRef.child("users").child(mUser.getUid());
+                    // Transaction to update SCORE
+                    mUsersRef.runTransaction(new Transaction.Handler() {
+                        @Override
+                        public Transaction.Result doTransaction(MutableData mutableData) {
+                            // Get user
+                            User user = mutableData.getValue(User.class);
+                            // Set score = exercise score + user actual score
+                            user.setScore(item.getScore() + user.getScore());
+                            // Update user
+                            mutableData.setValue(user);
+                            return Transaction.success(mutableData);
+                        }
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                            // Transaction completed
+                        }
+                    });
+                    // Intent to Activity TrainingNewActivity
+                    returnActivityNewTraining();
+                }
             }
         });
 
@@ -207,7 +245,6 @@ public class TrainingSelectActivity extends AppCompatActivity {
             // DIALOG TIME AND DATE //
     //========================================//
     private void setDefaultDateTime() {
-
         // Default is current time + 7 days
         mDate = new Date();
         mDate = new Date(mDate.getTime() + SEVEN_DAYS);
@@ -217,17 +254,14 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
         setDateString(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
                 c.get(Calendar.DAY_OF_MONTH));
-
         dateView.setText(dateString);
 
         setTimeString(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
                 c.get(Calendar.MILLISECOND));
-
         timeView.setText(timeString);
     }
 
     private static void setDateString(int year, int monthOfYear, int dayOfMonth) {
-
         // Increment monthOfYear for Calendar/Date -> Time Format setting
         monthOfYear++;
         String mon = "" + monthOfYear;
@@ -274,7 +308,6 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-
             // Use the current date as the default date in the picker
             final Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
@@ -289,7 +322,6 @@ public class TrainingSelectActivity extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
             setDateString(year, monthOfYear, dayOfMonth);
-
             dateView.setText(dateString);
         }
 
@@ -301,7 +333,6 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-
             // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -314,7 +345,6 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             setTimeString(hourOfDay, minute, 0);
-
             timeView.setText(timeString);
         }
     }

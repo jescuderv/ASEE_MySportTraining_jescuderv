@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 public class TrainingSelectCategoryActivity extends AppCompatActivity {
 
-    final static String CATEGORY = "category";
-    private final String TRAINING_NAME = "trainingTitle";
+    private final static String CATEGORY = "category";
+    private final static String TRAINING_NAME = "trainingTitle";
 
     private String mTrainingName = "";
 

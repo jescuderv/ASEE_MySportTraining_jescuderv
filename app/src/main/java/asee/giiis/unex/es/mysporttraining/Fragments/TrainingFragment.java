@@ -7,13 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,13 +31,20 @@ import asee.giiis.unex.es.mysporttraining.TrainingNewActivity;
 
 public class TrainingFragment extends Fragment {
 
-    private final String DIALOG_ACCEPT_BUTTON = "ACEPTAR";
-    private final String DIALOG_CANCEL_BUTTON = "CANCELAR";
+    private static final String DIALOG_ACCEPT_BUTTON = "ACEPTAR";
+    private static final String DIALOG_CANCEL_BUTTON = "CANCELAR";
 
+    // FirebaseAuth Object
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    // Firebase User
+    FirebaseUser mUser = mFirebaseAuth.getCurrentUser();
+
+    // Recycler View
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private List<String> mTrainingList = new ArrayList<>();
 
+    // DatabaseReference Firebase
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mActivitiesRef;
 
@@ -99,34 +107,36 @@ public class TrainingFragment extends Fragment {
     private void retrieveTrainingListFirebase(){
         mTrainingList.clear();
         // Firebase ref: /exerciseList/"user"
-        mActivitiesRef = mRootRef.child("exerciseList").child("idUsuarioPrueba");
-        // Child event for get all activities for a training
-        mActivitiesRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                retrieveTrainings(dataSnapshot);
-            }
+        if (mUser != null) {
+            mActivitiesRef = mRootRef.child("exerciseList").child(mUser.getUid());
+            // Child event for get all activities for a training
+            mActivitiesRef.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    retrieveTrainings(dataSnapshot);
+                }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            }
+                }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            }
+                }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            }
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
     // Add all training names to list adapter
@@ -140,7 +150,7 @@ public class TrainingFragment extends Fragment {
                     new StringOnClikcAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(String item) {
-                            Log.i("TODO", "todoooo");
+                            // TODO click al pulsar sobre un ejercicio.
                         }
                     });
                     mRecyclerView.setAdapter(mAdapter);

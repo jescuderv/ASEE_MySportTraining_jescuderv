@@ -79,6 +79,7 @@
     <string name="create_training">Nombre del entrenamiento</string>
     <string name="create_training_list">Lista de ejercicios</string>
     <string name="create_training_add_button">Agregar ejercicio</string>
+    <string name="create_training_finsh_button">Finalizar</string>
 
     <!--TrainingCategory-->
     <string name="training_category_sports">Deportes</string>

@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,17 +28,24 @@ import asee.giiis.unex.es.mysporttraining.Objects.Activity;
 
 public class TrainingNewActivity extends AppCompatActivity {
 
-    private final String DIALOG_OK_BUTTON = "OK";
-    private final String TRAINING_NAME = "trainingTitle";
+    private static final String DIALOG_OK_BUTTON = "OK";
+    private static final String TRAINING_NAME = "trainingTitle";
 
+    // Recycler view
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private List<Activity> mExerciseList = new ArrayList<>();
 
     private String mTrainingName = "";
 
+    // DatabaseReference Firebase
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mActivitiesRef;
+
+    // FirebaseAuth Object
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    // Firebase User
+    FirebaseUser mUser = mFirebaseAuth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +63,19 @@ public class TrainingNewActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
 
 
-        Button button = (Button) findViewById(R.id.create_training_add_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button buttonAdd = (Button) findViewById(R.id.create_training_add_button);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startTrainingSelectCategory();
+            }
+        });
+
+        Button buttonFinish = (Button) findViewById(R.id.create_training_finish_button);
+        buttonFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnMainActivity();
             }
         });
     }
@@ -70,11 +87,17 @@ public class TrainingNewActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Intent to finish exercise
+    private void returnMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 
     //========================================//
             // RETRIEVE DATA FIREBASE //
     //========================================//
-    private void retrieveExerciseListFirebase(){
+    private void retrieveExerciseListFirebase() {
         mExerciseList.clear();
         // Get training name from Intent
         Intent intent = getIntent();
@@ -82,35 +105,37 @@ public class TrainingNewActivity extends AppCompatActivity {
         if (bundle != null) {
             mTrainingName = (String) bundle.get(TRAINING_NAME);
         }
-        // Firebase ref: /exerciseList/"user"/"exerciseList"
-        mActivitiesRef = mRootRef.child("exerciseList").child("idUsuarioPrueba").child(mTrainingName);
-        // Child event for get all activities for a training
-        mActivitiesRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                retrieveExercises(dataSnapshot);
-            }
+        if (mUser != null) {
+            // Firebase ref: /exerciseList/"user"/"exerciseList"
+            mActivitiesRef = mRootRef.child("exerciseList").child(mUser.getUid()).child(mTrainingName);
+            // Child event for get all activities for a training
+            mActivitiesRef.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    retrieveExercises(dataSnapshot);
+                }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            }
+                }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            }
+                }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            }
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
     // Add all training exercises to list adapter
