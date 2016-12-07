@@ -2,10 +2,8 @@ package asee.giiis.unex.es.mysporttraining;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -27,7 +25,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,6 +82,7 @@ public class UserProfileActivity extends AppCompatActivity {
             mSex = (TextView) findViewById(R.id.usr_prof_sex_value);
             mPhysicalCondition = (TextView) findViewById(R.id.usr_prof_physical_condition_value);
 
+            loadData();
 
             // ===== IMAGE PROFILE ==== //
 
@@ -96,15 +94,15 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             });
 
+
         } else {
             Toast.makeText(this, "Error en la recuperación del usuario de la base de" +
                     " datos", Toast.LENGTH_SHORT).show();
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+
+    private void loadData(){
 
         if (mUser != null) {
             // Get user information profile and show
@@ -119,9 +117,9 @@ public class UserProfileActivity extends AppCompatActivity {
                     mFirstName.setText(user.getFirstName());
                     mLastName.setText(user.getLastName());
                     mEmail.setText(user.getEmail());
-                    mHeight.setText(user.getHeight().toString());
-                    mWeight.setText(user.getWeight().toString());
-                    mAge.setText(user.getAge().toString());
+                    mHeight.setText(user.getHeight().toString() + " cm");
+                    mWeight.setText(user.getWeight().toString() + " kg");
+                    mAge.setText(user.getAge().toString() + " años");
                     mSex.setText(user.getSex());
                     mPhysicalCondition.setText(user.getPhysicalCondition());
 
@@ -159,19 +157,8 @@ public class UserProfileActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
             // If activity result is OK, then get file uri
             mFilePath = data.getData();
-
-            try {
-                // Get bitmap from uri
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mFilePath);
-
-                // Set image in profile circleview
-                CircleImageView imageProfile = (CircleImageView) findViewById(R.id.usr_prof_profile_image);
-                imageProfile.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            uploadFile();
         }
-        uploadFile();
     }
 
     // Upload file to Firebase storage
@@ -225,8 +212,17 @@ public class UserProfileActivity extends AppCompatActivity {
                             }
                         }
                     });
+            restartActivity();
         } else {
             Toast.makeText(this, "Error en la subida de imagen", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // Restart activity to reload image profile
+    private void restartActivity(){
+        Intent intent = new Intent(this, UserProfileActivity.class);
+        startActivity(intent);
+        finish();
+        Toast.makeText(this, "Aplicando cambios...", Toast.LENGTH_LONG).show();
     }
 }

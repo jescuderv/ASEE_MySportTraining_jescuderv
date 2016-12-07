@@ -48,6 +48,7 @@ public class WeightControlFragment extends Fragment {
     // DatabaseReference Firebase
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mWeightControlRef;
+    private DatabaseReference mUsersRef;
 
     // FirebaseAuth Object
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
@@ -171,13 +172,21 @@ public class WeightControlFragment extends Fragment {
                                 error = true;
                             }
                             if (!error) {
+                                // New map to set data
                                 Map<String, String> map = new HashMap<>();
                                 map.put(MAP_WEIGHT, weightData);
                                 map.put(MAP_DATE, dateString);
                                 mWeightList.add(map);
-
+                                // Firebase ref: /root/weightControl/"user"
                                 mWeightControlRef = mRootRef.child("weightControl").child(mUser.getUid());
                                 mWeightControlRef.push().setValue(map);
+                                // Firebase ref: /root/users/"user"
+                                mUsersRef = mRootRef.child("users").child(mUser.getUid());
+                                // Update weight attribute for user with last weight added
+                                Map<String, Object> taskMap = new HashMap<>();
+                                taskMap.put("weight", Integer.parseInt(weightData));
+                                mUsersRef.updateChildren(taskMap);
+
                             } else {
                                 Toast.makeText(getContext(), "Rellene todos los campos", Toast.LENGTH_SHORT).show();
                             }
