@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -81,7 +82,11 @@ public class TrainingFragment extends Fragment {
         // Add the buttons
         builder.setPositiveButton(DIALOG_ACCEPT_BUTTON, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                startCreateTrainingActivity(input.getText().toString());
+                if (!input.getText().toString().isEmpty()) {
+                    startCreateTrainingActivity(input.getText().toString());
+                } else{
+                    Toast.makeText(getContext(), "Rellene todos los campos", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         builder.setNegativeButton(DIALOG_CANCEL_BUTTON, new DialogInterface.OnClickListener() {

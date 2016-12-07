@@ -96,4 +96,11 @@
     <string name="dialog_duration_icon">Icono duración</string>
     <string name="no_date_set_string">0000-00-00</string>
     <string name="no_time_set_string">00:00:00</string>
+
+    <!--DialogWeightControl-->
+    <string name="dialog_weigth_icon">Icono peso</string>
+    <string name="dialog_weight_date_icon">Icono fecha</string>
+    <string name="dialog_weight">Peso: </string>
+    <string name="dialog_weight_date">Fecha: </string>
+    <string name="dialog_weight_input">Peso</string>
 </resources>

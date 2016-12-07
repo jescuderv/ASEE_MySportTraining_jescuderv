@@ -39,8 +39,10 @@ import asee.giiis.unex.es.mysporttraining.Objects.User;
 public class TrainingSelectActivity extends AppCompatActivity {
 
     private final static String CATEGORY = "category";
-    private final static String DIALOG_ACCEPT_BUTTON = "Aceptar";
     private final static String TRAINING_NAME = "trainingTitle";
+    // Dialog
+    private final static String DIALOG_ACCEPT_BUTTON = "Aceptar";
+    private static final String DIALOG_CANCEL_BUTTON = "CANCELAR";
 
     // DatabaseReference Firebase
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -60,7 +62,6 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
     private String mCategory;
     private Date mDate;
-    private Integer mScore;
     private String mTrainingName = "";
 
     // RecyclerView
@@ -224,6 +225,11 @@ public class TrainingSelectActivity extends AppCompatActivity {
                     // Intent to Activity TrainingNewActivity
                     returnActivityNewTraining();
                 }
+            }
+        });
+        builder.setNegativeButton(DIALOG_CANCEL_BUTTON, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
             }
         });
 
