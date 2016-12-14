@@ -75,6 +75,11 @@ public class TrainingFragment extends Fragment {
         return view;
     }
 
+
+    //========================================//
+            // CREATE NEW TRAINING //
+    //========================================//
+
     // Intent to create a new Training
     private void startCreateTraining() {
         final EditText input = new EditText(getActivity());

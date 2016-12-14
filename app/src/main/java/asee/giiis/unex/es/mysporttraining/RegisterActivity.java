@@ -240,7 +240,6 @@ public class RegisterActivity extends AppCompatActivity {
 
                                                     // Get FirebaseUser reference (just created)
                                                     FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                                                    String a = user.getUid();
                                                     // Insert into Firebase databases: /root/users/"new user"
                                                     if (user != null) {
                                                         mUsersRef.child(user.getUid()).setValue(mUser);
