@@ -5,12 +5,11 @@
     android:orientation="vertical"
     tools:context="asee.giiis.unex.es.mysporttraining.Fragments.StatisticsFragment">
 
-    <com.jjoe64.graphview.GraphView
+    <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/graphic_score"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="300dp"/>
 
-    </com.jjoe64.graphview.GraphView>
 
     <android.support.v7.widget.RecyclerView
         android:layout_marginTop="15dp"

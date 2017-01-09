@@ -71,7 +71,7 @@ public class WeightControlFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_weight_control, container, false);
 
-        retrieveDataFirebase();
+       retrieveDataFirebase();
 
         Button button = (Button) view.findViewById(R.id.weight_ctrl_add_info);
         button.setOnClickListener(new View.OnClickListener() {

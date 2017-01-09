@@ -36,7 +36,7 @@ dependencies {
     // SupportLibrary
     compile 'com.android.support:support-v4:24.2.1'
     // GraphicView
-    compile 'com.jjoe64:graphview:4.2.1'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     // CalendarView
     compile 'com.github.sundeepk:compact-calendar-view:1.9.4'
     // GoogleMaps Service

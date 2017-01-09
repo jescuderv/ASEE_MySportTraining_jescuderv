@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     // Firebase User
     FirebaseUser mUser = mFirebaseAuth.getCurrentUser();
 
+
     // Header items
     private TextView mUsername;
     private TextView mFirstName;
@@ -77,8 +78,6 @@ public class MainActivity extends AppCompatActivity
         mScore = (TextView) header.findViewById(R.id.nav_usr_score);
         mImageProfile = ((CircleImageView) header.findViewById(R.id.nav_usr_profile_image));
 
-//        // Retrieve data for header
-//        retrieveHeaderFirebase();
 
         // Intent for UserProfileActivity
         mImageProfile.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +92,7 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setTitle("Actividad");
         navigationView.setCheckedItem(R.id.nav_activity);
         setFragment(0);
+
     }
 
 
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.content_main, fragment)
                     .commit();
         }
-
+        
     }
 
 
@@ -267,4 +267,5 @@ public class MainActivity extends AppCompatActivity
             });
         }
     }
+
 }
