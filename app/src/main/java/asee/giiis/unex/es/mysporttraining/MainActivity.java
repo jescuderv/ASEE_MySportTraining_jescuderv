@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_logout:
                 // SignOut mFirebaseAuth
-                if (mUser != null){
+                if (mUser != null) {
                     mFirebaseAuth.signOut();
                     finish();
                     // Return to login activity
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity
 
 
     //========================================//
-                // INTENTS //
+    // INTENTS //
     //========================================//
 
     private void startUserProfileActivity() {
@@ -228,13 +228,13 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    private void startLoginctivity(){
+    private void startLoginctivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
     //========================================//
-            // FIREBASE HEADER //
+    // FIREBASE HEADER //
     //========================================//
 
 
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
 
         super.onStart();
-        if (mUser != null){
+        if (mUser != null) {
             // FirebaseReference: /root/users/"user"
             mUsersRef = mRootRef.child("users").child(mUser.getUid());
             mUsersRef.addValueEventListener(new ValueEventListener() {
