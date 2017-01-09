@@ -2,12 +2,17 @@ package asee.giiis.unex.es.mysporttraining.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -15,13 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
-import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.OnDataPointTapListener;
-import com.jjoe64.graphview.series.Series;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,7 +35,6 @@ import asee.giiis.unex.es.mysporttraining.R;
 
 public class StatisticsFragment extends Fragment {
 
-
     // Reference root JSON database
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mTrainingRef;
@@ -47,7 +44,7 @@ public class StatisticsFragment extends Fragment {
     // Firebase User
     private FirebaseUser mUser = mFirebaseAuth.getCurrentUser();
 
-    private GraphView mGraph;
+    private LineChart mChart;
 
 
     @Override
@@ -55,7 +52,7 @@ public class StatisticsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statistics, container, false);
 
-        mGraph = (GraphView) view.findViewById(R.id.graphic_score);
+        mChart = (LineChart) view.findViewById(R.id.graphic_score);
 
         retrieveFirebaseData();
 
@@ -76,12 +73,12 @@ public class StatisticsFragment extends Fragment {
     private void retrieveFirebaseData() {
         if (mUser != null) {
             mTrainingRef = mRootRef.child("exerciseList").child(mUser.getUid());
-            mTrainingRef.addValueEventListener(new ValueEventListener() {
+            mTrainingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                //mTrainingRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     try {
                         initGraphicView(dataSnapshot);
-                        mGraph.invalidate();
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -92,7 +89,6 @@ public class StatisticsFragment extends Fragment {
 
                 }
             });
-
         }
     }
 
@@ -107,8 +103,6 @@ public class StatisticsFragment extends Fragment {
             }
         }
 
-        Log.i("tamaño, evento", Integer.toString(exerciseList.size()));
-
         // Sort by Date
         Collections.sort(exerciseList, new Comparator<Activity>() {
             @Override
@@ -119,7 +113,6 @@ public class StatisticsFragment extends Fragment {
             }
         });
 
-        List<DataPoint> dataPoints = new ArrayList<>();
         String date = "";
         Integer score = 0;
         Integer maxScore = 0;
@@ -128,58 +121,77 @@ public class StatisticsFragment extends Fragment {
         }
 
 
+        List<Entry> entries = new ArrayList<>();
+        List<String> dateList = new ArrayList<>();
+
+        Integer j = 0;
         for (int i = 0; i < exerciseList.size(); i++) {
             if (exerciseList.get(i).getDate().equals(date)) {
                 score += exerciseList.get(i).getScore();
             } else {
-                dataPoints.add(new DataPoint(new SimpleDateFormat("yyyy-MM-dd").parse(date),
-                        (long) score));
-//                series.appendData(new DataPoint(new SimpleDateFormat("yyyy-MM-dd").parse(date),
-//                        (long) score), false, 100);
+                entries.add(new Entry(j, score));
+                j++;
+                dateList.add(date);
                 if (score > maxScore) {
                     maxScore = score;
                 }
                 score = exerciseList.get(i).getScore();
             }
             date = exerciseList.get(i).getDate();
+        }
+        entries.add(new Entry(j, score));
+        dateList.add(date);
+
+
+        LineDataSet dataSet = new LineDataSet(entries, "Puntuación");
+        LineData lineData = new LineData(dataSet);
+        mChart.setData(lineData);
+
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setValueFormatter(new MyCustomXAxisValueFormatter(dateList));
+        xAxis.setGranularityEnabled(true);
+        xAxis.setGranularity(1);
+
+
+
+
+        mChart.setVisibleXRange(0, 3);
+        // enable touch gestures
+        mChart.setTouchEnabled(true);
+
+
+        // enable scaling and dragging
+        mChart.setDragEnabled(true);
+        mChart.setScaleEnabled(true);
+        mChart.setDrawGridBackground(false);
+        mChart.setHighlightPerDragEnabled(true);
+
+        mChart.invalidate();
+
+//        series.setOnDataPointTapListener(new OnDataPointTapListener() {
+//            @Override
+//            public void onTap(Series series, DataPointInterface dataPoint) {
+//                Toast.makeText(getActivity(), getDate((long) dataPoint.getX()) + ": " + (int) dataPoint.getY()
+//                        + " puntos", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+    }
+
+
+    public class MyCustomXAxisValueFormatter implements IAxisValueFormatter {
+
+        private List<String> mDateList;
+
+        public MyCustomXAxisValueFormatter(List<String> dateList) {
+            this.mDateList = dateList;
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            return mDateList.get((int) value);
 
         }
-//        series.appendData(new DataPoint(new SimpleDateFormat("yyyy-MM-dd").parse(date),
-//                (long) score), false, 100);
-        dataPoints.add(new DataPoint(new SimpleDateFormat("yyyy-MM-dd").parse(date),
-                (long) score));
-        DataPoint[] dataPointsArray = new DataPoint[dataPoints.size()];
-        dataPointsArray = dataPoints.toArray(dataPointsArray);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsArray);
-        mGraph.addSeries(series);
-
-        // set date label formatter
-        mGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        mGraph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
-        mGraph.getGridLabelRenderer().setNumVerticalLabels(5);
-
-        // activate horizontal zooming and scrolling
-        mGraph.getViewport().setScalable(true);
-
-
-        // set manual y bounds to have nice steps
-        mGraph.getViewport().setMinY(10);
-        mGraph.getViewport().setMaxY(maxScore);
-        mGraph.getViewport().setYAxisBoundsManual(true);
-
-
-        // as we use dates as labels, the human rounding to nice readable numbers
-        // is not necessary
-        mGraph.getGridLabelRenderer().setHumanRounding(false);
-
-        series.setOnDataPointTapListener(new OnDataPointTapListener() {
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint) {
-                Toast.makeText(getActivity(), getDate((long) dataPoint.getX()) + ": " + (int) dataPoint.getY()
-                        + " puntos", Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
 
