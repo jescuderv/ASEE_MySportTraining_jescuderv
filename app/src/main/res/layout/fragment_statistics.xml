@@ -15,15 +15,5 @@
             android:layout_width="match_parent"
             android:layout_height="300dp" />
 
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:fadeScrollbars="false"
-            android:scrollbarThumbVertical="@android:color/darker_gray"
-            android:scrollbars="vertical">
-
-        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 </FrameLayout>
