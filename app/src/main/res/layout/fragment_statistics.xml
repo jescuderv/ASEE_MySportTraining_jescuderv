@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragmentid"
     android:layout_width="match_parent"
@@ -15,5 +15,26 @@
             android:layout_width="match_parent"
             android:layout_height="300dp" />
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/statistics_button_general"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/statistics_general"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/statistics_button_monthly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/statistics_monthly"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>

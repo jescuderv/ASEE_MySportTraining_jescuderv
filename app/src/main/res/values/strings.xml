@@ -66,6 +66,10 @@
     <string name="training_list">Lista de Entrenamientos</string>
     <string name="add_training_button">Agregar entrenamiento</string>
 
+    <!--Statistics-->
+    <string name="statistics_general">General</string>
+    <string name="statistics_monthly">Mensual</string>
+
     <!--Activity-->
     <string name="activity_name">Nombre de la actividad</string>
     <string name="activity_type">Tipo de actividad</string>
