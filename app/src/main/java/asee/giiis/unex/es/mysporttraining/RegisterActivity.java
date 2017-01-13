@@ -165,7 +165,7 @@ public class RegisterActivity extends AppCompatActivity {
             // username
             if (!checkLenght(usrUsername)){
                 username.setErrorEnabled(true);
-                username.setError("Introduce un nombre de usuario de al menos 6 caracteres");
+                username.setError("Introduce al menos 7 caracteres");
                 error = true;
             } else { username.setErrorEnabled(false); }
             // first name
@@ -189,7 +189,7 @@ public class RegisterActivity extends AppCompatActivity {
             // password
             if (!checkLenght(usrPassword)){
                 password.setErrorEnabled(true);
-                password.setError("Introduce al menos 5 caracteres");
+                password.setError("Introduce al menos 7 caracteres");
                 error = true;
             } else { password.setErrorEnabled(false); }
             // height

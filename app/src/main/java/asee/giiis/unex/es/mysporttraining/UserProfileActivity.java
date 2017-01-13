@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
@@ -59,7 +61,6 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView mSex;
     private TextView mPhysicalCondition;
     private CircleImageView mImageProfile;
-
 
 
     @Override
@@ -102,7 +103,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
 
-    private void loadData(){
+    private void loadData() {
 
         if (mUser != null) {
             // Get user information profile and show
@@ -111,6 +112,9 @@ public class UserProfileActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // Get user data
                     User user = dataSnapshot.getValue(User.class);
+
+                    mScore.setText(user.getScore().toString() + " puntos");
+
 
                     mUsername.setText(user.getUsername());
                     mScore.setText(user.getScore().toString() + " puntos");
@@ -140,7 +144,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
     //========================================//
-                // SET IMAGE PROFILE //
+            // SET IMAGE PROFILE //
     //========================================//
 
     private void startGetImageProfile() {
@@ -154,7 +158,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK && data != null) {
             // If activity result is OK, then get file uri
             mFilePath = data.getData();
             uploadFile();
@@ -163,22 +168,36 @@ public class UserProfileActivity extends AppCompatActivity {
 
     // Upload file to Firebase storage
     private void uploadFile() {
-
         if (mFilePath != null && mUser != null) {
+
             // Progress dialog
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Subiendo imagen...");
             progressDialog.show();
 
-            // Reference to Firebase storage. Save as "uID+profile.jpg"
-            StorageReference storageReference = mStorageImage.child("images/" + mUser.getUid() + "profile.jpg");
-            storageReference.putFile(mFilePath)
+            StorageMetadata metadata = new StorageMetadata.Builder()
+                    .setContentType("image/jpeg")
+                    .build();
+
+            // Reference to Firebase storage. Save as "uID.jpg"
+            UploadTask storageReference = mStorageImage.child("images/" + mUser.getUid()).putFile(mFilePath, metadata);
+
+            storageReference
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(UserProfileActivity.this, "Imagen subida correctamente",
                                     Toast.LENGTH_SHORT).show();
+
+                            // Retrieve user from Firebase: /root/users/"userID"
+                            mUsersRef = mRootRef.child("users").child(mUser.getUid());
+                            // New map to set URL download
+                            Map<String, Object> taskMap = new HashMap<>();
+                            taskMap.put("uriImageProfile", taskSnapshot.getDownloadUrl().toString());
+                            // Update usr image profile url
+                            mUsersRef.updateChildren(taskMap);
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -197,32 +216,9 @@ public class UserProfileActivity extends AppCompatActivity {
                             progressDialog.setMessage((int) progress + "% completado");
                         }
                     });
-            // get download url and set as user property
-            storageReference.getDownloadUrl()
-                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            if (mUser != null) {
-                                // Retrieve user from Firebase: /root/users/"userID"
-                                mUsersRef = mRootRef.child("users").child(mUser.getUid());
-                                // New map to set URL download
-                                Map<String, Object> taskMap = new HashMap<>();
-                                taskMap.put("uriImageProfile", uri.toString());
-                                mUsersRef.updateChildren(taskMap);
-                            }
-                        }
-                    });
-            restartActivity();
         } else {
             Toast.makeText(this, "Error en la subida de imagen", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Restart activity to reload image profile
-    private void restartActivity(){
-        Intent intent = new Intent(this, UserProfileActivity.class);
-        startActivity(intent);
-        finish();
-        Toast.makeText(this, "Aplicando cambios...", Toast.LENGTH_LONG).show();
-    }
 }
