@@ -16,18 +16,22 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import asee.giiis.unex.es.mysporttraining.Adapters.FriendsAdapter;
 import asee.giiis.unex.es.mysporttraining.Objects.User;
 import asee.giiis.unex.es.mysporttraining.R;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendsFragment extends Fragment {
 
@@ -52,15 +56,14 @@ public class FriendsFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private List<User> mFriendList = new ArrayList<>();
 
-    private boolean mEnc;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        final View view = inflater.inflate(R.layout.fragment_friends, container, false);
 
-        retrieveFriendsFirebase();
+        // Retrive data from Firebase to recycler view
+        retrieveFriendsFirebase(view);
 
         Button button = (Button) view.findViewById(R.id.friends_add_friends_button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -81,31 +84,17 @@ public class FriendsFragment extends Fragment {
 
 
     //========================================//
-    // RETRIEVE DATA FIREBASE //
+            // RETRIEVE DATA FIREBASE //
     //========================================//
 
-    private void retrieveFriendsFirebase() {
+    private void retrieveFriendsFirebase(final View view) {
         if (mUser != null) {
+            // Firebase ref: /friendlist/"userid"
             mFriendsRef = mRootRef.child("friendList").child(mUser.getUid());
-            mFriendsRef.addChildEventListener(new ChildEventListener() {
+            mFriendsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    getFriendList(dataSnapshot);
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    getFriendList(dataSnapshot);
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    getFriendList(dataSnapshot, view);
                 }
 
                 @Override
@@ -116,15 +105,63 @@ public class FriendsFragment extends Fragment {
         }
     }
 
-    private void getFriendList(DataSnapshot dataSnapshot) {
-        User user = dataSnapshot.getValue(User.class);
-        mFriendList.add(user);
+    private void getFriendList(DataSnapshot dataSnapshot, View view) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            User user = ds.getValue(User.class);
+            mFriendList.add(user);
+        }
 
         if (mFriendList.size() > 0) {
             // Adapter
             mAdapter = new FriendsAdapter(this.getActivity(), mFriendList);
             mRecyclerView.setAdapter(mAdapter);
         }
+
+        //podium
+        podium(view);
+    }
+
+    private void podium(final View view) {
+        // Reference to our own user to compare score
+        DatabaseReference myUserRef = mRootRef.child("users").child(mUser.getUid());
+        myUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                List<User> friendListAux = new ArrayList<>(mFriendList);
+                friendListAux.add(dataSnapshot.getValue(User.class));
+
+                // Sort by score
+                Collections.sort(friendListAux, new Comparator<User>() {
+                    @Override
+                    public int compare(User o1, User o2) {
+                        if (o1.getScore() == null || o2.getScore() == null)
+                            return 0;
+                        return o1.getScore().compareTo(o2.getScore());
+                    }
+                });
+
+                // Set image profile in podium
+                if (friendListAux.size() >= 1) {
+                    CircleImageView circleImageView = (CircleImageView) view.findViewById(R.id.friends_first_place);
+                    Picasso.with(getActivity()).load(friendListAux.get(friendListAux.size() - 1).getUriImageProfile()).into(circleImageView);
+                    if (friendListAux.size() >= 2) {
+                        CircleImageView circleImageView2 = (CircleImageView) view.findViewById(R.id.friends_second_place);
+                        Picasso.with(getActivity()).load(friendListAux.get(friendListAux.size() - 2).getUriImageProfile()).into(circleImageView2);
+                        if (friendListAux.size() >= 3) {
+                            CircleImageView circleImageView3 = (CircleImageView) view.findViewById(R.id.friends_third_place);
+                            Picasso.with(getActivity()).load(friendListAux.get(friendListAux.size() - 3).getUriImageProfile()).into(circleImageView3);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
 
@@ -142,25 +179,10 @@ public class FriendsFragment extends Fragment {
                 if (!input.getText().toString().isEmpty()) {
                     if (mUser != null) {
                         mUsersRef = mRootRef.child("users");
-                        mUsersRef.addChildEventListener(new ChildEventListener() {
+                        mUsersRef.addValueEventListener(new ValueEventListener() {
                             @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            public void onDataChange(DataSnapshot dataSnapshot) {
                                 addFriend(dataSnapshot, input.getText().toString());
-                            }
-
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                                addFriend(dataSnapshot, input.getText().toString());
-                            }
-
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                            }
-
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
                             }
 
                             @Override
@@ -183,21 +205,26 @@ public class FriendsFragment extends Fragment {
         builder.setView(input);
         AlertDialog dialog = builder.create();
         dialog.show();
-        if (mEnc) {
+    }
+
+
+    private void addFriend(DataSnapshot dataSnapshot, String email) {
+        boolean enc = false;
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            User user = ds.getValue(User.class);
+            // User doesn't exist or user = me
+            if (user.getEmail().equals(email) && !mUser.getEmail().equals(email)) {
+                mFriendsRef = mRootRef.child("friendList").child(mUser.getUid());
+                mFriendsRef.child(ds.getKey()).setValue(user);
+                enc = true;
+            }
+        }
+        if (enc) {
             Toast.makeText(getContext(), "Usuario agregado como amigo", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), "El usuario introducido no existe", Toast.LENGTH_SHORT).show();
         }
     }
 
-
-    private void addFriend(DataSnapshot dataSnapshot, String email) {
-        User user = dataSnapshot.getValue(User.class);
-        if (user.getEmail().equals(email) && !mUser.getEmail().equals(email)) {
-            mFriendsRef = mRootRef.child("friendList").child(mUser.getUid());
-            mFriendsRef.child(dataSnapshot.getKey()).setValue(user);
-            mEnc = true;
-        }
-    }
 
 }

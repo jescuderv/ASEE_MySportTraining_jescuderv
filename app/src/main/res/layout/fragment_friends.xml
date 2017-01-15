@@ -21,7 +21,7 @@
             android:weightSum="3">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/friends_first_place"
+                android:id="@+id/friends_second_place"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
                 android:layout_gravity="center"
@@ -32,7 +32,7 @@
                 app:civ_border_width="2dp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/friends_second_place"
+                android:id="@+id/friends_first_place"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
                 android:layout_gravity="center"
