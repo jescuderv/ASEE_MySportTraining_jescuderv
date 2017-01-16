@@ -160,7 +160,10 @@ public class TrainingFragment extends Fragment {
                     new StringOnClikcAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(String item) {
-                            // TODO click al pulsar sobre un ejercicio.
+                            // Show details from training clicked
+                            Intent intent = new Intent(getActivity(), TrainingNewActivity.class);
+                            intent.putExtra("trainingTitle", item);
+                            startActivity(intent);
                         }
                     });
                     mRecyclerView.setAdapter(mAdapter);
