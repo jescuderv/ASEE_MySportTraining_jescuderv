@@ -133,7 +133,7 @@ public class TrainingFragment extends Fragment {
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                    retrieveTrainings(dataSnapshot);
                 }
 
                 @Override
@@ -155,18 +155,49 @@ public class TrainingFragment extends Fragment {
         mTrainingList.add(trainingName);
 
         // Adapter
-        if (mTrainingList.size() > 0) {
+        if (mTrainingList.size() >= 0) {
             mAdapter = new StringOnClikcAdapter(getContext(), mTrainingList,
                     new StringOnClikcAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(String item) {
-                            // Show details from training clicked
-                            Intent intent = new Intent(getActivity(), TrainingNewActivity.class);
-                            intent.putExtra("trainingTitle", item);
-                            startActivity(intent);
+                            onItemOptions(item);
                         }
                     });
                     mRecyclerView.setAdapter(mAdapter);
         }
+    }
+
+
+    //========================================//
+            // DIALOG ON CLICK TRAINING //
+    //========================================//
+    private void onItemOptions(final String item){
+        // Dialog with training options
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // Set title and message
+        builder.setTitle("Nombre de entrenamiento");
+        builder.setMessage(item);
+
+        // Add the buttons
+        builder.setNeutralButton("Detalles", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Show details from training clicked
+                Intent intent = new Intent(getActivity(), TrainingNewActivity.class);
+                intent.putExtra("trainingTitle", item);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Borrar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                mRootRef.child("exerciseList").child(mUser.getUid()).child(item).removeValue();
+                mTrainingList.clear();
+            }
+        });
+
+        // Show dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
