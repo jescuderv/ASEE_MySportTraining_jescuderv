@@ -14,11 +14,11 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,7 @@ public class TrainingNewActivity extends AppCompatActivity {
 
     private static final String DIALOG_OK_BUTTON = "OK";
     private static final String TRAINING_NAME = "trainingTitle";
+    private static final String DELETE_TRAINING = "Borrar";
 
     // Recycler view
     private RecyclerView mRecyclerView;
@@ -108,26 +109,11 @@ public class TrainingNewActivity extends AppCompatActivity {
         if (mUser != null) {
             // Firebase ref: /exerciseList/"user"/"exerciseList"
             mActivitiesRef = mRootRef.child("exerciseList").child(mUser.getUid()).child(mTrainingName);
-            // Child event for get all activities for a training
-            mActivitiesRef.addChildEventListener(new ChildEventListener() {
+            // Event for get all activities for a training
+            mActivitiesRef.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                public void onDataChange(DataSnapshot dataSnapshot) {
                     retrieveExercises(dataSnapshot);
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
                 }
 
                 @Override
@@ -140,11 +126,14 @@ public class TrainingNewActivity extends AppCompatActivity {
 
     // Add all training exercises to list adapter
     private void retrieveExercises(DataSnapshot dataSnapshot){
-        Activity activity = dataSnapshot.getValue(Activity.class);
-        mExerciseList.add(activity);
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            Activity activity = ds.getValue(Activity.class);
+            mExerciseList.add(activity);
+        }
+
 
         // Adapter
-        if (mExerciseList.size() > 0) {
+        if (mExerciseList.size() >= 0) {
             mAdapter = new TrainingSelectActivityAdapter(this, mExerciseList,
                     new TrainingSelectActivityAdapter.OnItemClickListener() {
                         @Override
@@ -159,7 +148,7 @@ public class TrainingNewActivity extends AppCompatActivity {
     //========================================//
                     // DIALOG //
     //========================================//
-    private void exerciseDialog(Activity item){
+    private void exerciseDialog(final Activity item){
         // AlertDialog - SHow exercises details
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -185,6 +174,30 @@ public class TrainingNewActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+            }
+        });
+        builder.setNeutralButton(DELETE_TRAINING, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Firebase ref: /exerciseList/"userId"/"trainingName"/"exerciseDeleteID"
+                final DatabaseReference deleteReference =  mRootRef.child("exerciseList").child(mUser.getUid()).child(mTrainingName);
+                deleteReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()){
+                            if (ds.getValue(Activity.class).getName().equals(item.getName())){
+                                // Delete selected item
+                                deleteReference.child(ds.getKey()).removeValue();
+                            }
+                        }
+                        mExerciseList.clear();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
         AlertDialog dialog = builder.create();
