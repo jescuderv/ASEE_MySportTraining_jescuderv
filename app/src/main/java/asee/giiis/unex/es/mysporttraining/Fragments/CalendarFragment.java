@@ -1,7 +1,9 @@
 package asee.giiis.unex.es.mysporttraining.Fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -138,6 +141,8 @@ public class CalendarFragment extends Fragment {
             });
         }
     }
+
+
 
 }
 

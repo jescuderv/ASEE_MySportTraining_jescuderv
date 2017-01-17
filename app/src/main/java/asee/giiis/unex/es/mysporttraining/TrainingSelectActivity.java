@@ -4,9 +4,14 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import asee.giiis.unex.es.mysporttraining.Adapters.TrainingSelectActivityAdapter;
 import asee.giiis.unex.es.mysporttraining.Objects.Activity;
@@ -69,6 +75,12 @@ public class TrainingSelectActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private List<Activity> mExerciseList = new ArrayList<>();
 
+    // Calendar Provider Params
+    private static int mDayCalendar;
+    private static int mMonthCalendar;
+    private static int mYearCalendar;
+    private static int mHourCalendar;
+    private static int mMinuteCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +100,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
     }
 
     //========================================//
-            // RETRIEVE DATA FIREBASE //
+    // RETRIEVE DATA FIREBASE //
     //========================================//
     private void retrieveExerciseListFirebase() {
         mExerciseList.clear();
@@ -150,7 +162,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
 
     //========================================//
-                    // DIALOG //
+    // DIALOG //
     //========================================//
     private void exerciseDialog(final Activity item) {
         // AlertDialog - set info for an exercise
@@ -201,6 +213,8 @@ public class TrainingSelectActivity extends AppCompatActivity {
                     // Add a new activity to Firebase ref
                     mActivitiesRef.push().setValue(item);
 
+                    contentProviderCalendar(item);
+
                     // Update user SCORE
                     // Firebase ref: /root/users/"user"
                     mUsersRef = mRootRef.child("users").child(mUser.getUid());
@@ -239,14 +253,14 @@ public class TrainingSelectActivity extends AppCompatActivity {
     }
 
     // Intent to Activity TrainingNewActivity
-    private void returnActivityNewTraining(){
+    private void returnActivityNewTraining() {
         Intent intent = new Intent(this, TrainingNewActivity.class);
         intent.putExtra(TRAINING_NAME, mTrainingName);
         startActivity(intent);
     }
 
     //========================================//
-            // DIALOG TIME AND DATE //
+    // DIALOG TIME AND DATE //
     //========================================//
     private void setDefaultDateTime() {
         // Default is current time
@@ -266,6 +280,11 @@ public class TrainingSelectActivity extends AppCompatActivity {
     }
 
     private static void setDateString(int year, int monthOfYear, int dayOfMonth) {
+        // Content Provider calendar variables
+        mYearCalendar = year;
+        mMonthCalendar = monthOfYear;
+        mDayCalendar = dayOfMonth;
+
         // Increment monthOfYear for Calendar/Date -> Time Format setting
         monthOfYear++;
         String mon = "" + monthOfYear;
@@ -280,6 +299,10 @@ public class TrainingSelectActivity extends AppCompatActivity {
     }
 
     private static void setTimeString(int hourOfDay, int minute, int mili) {
+        // Content Provider calendar variables
+        mHourCalendar = hourOfDay;
+        mMinuteCalendar = minute;
+
         String hour = "" + hourOfDay;
         String min = "" + minute;
 
@@ -293,17 +316,17 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
     private void showDatePickerDialog() {
         DialogFragment dialog = new DatePickerFragment();
-        dialog.show(getFragmentManager(),"datepicker");
+        dialog.show(getFragmentManager(), "datepicker");
     }
 
     private void showTimePickerDialog() {
         DialogFragment dialog = new TimePickerFragment();
-        dialog.show(getFragmentManager(),"timepicker");
+        dialog.show(getFragmentManager(), "timepicker");
     }
 
 
     //========================================//
-          // DIALOG FRAGMENT FOR PICKERS //
+    // DIALOG FRAGMENT FOR PICKERS //
     //========================================//
 
     // DialogFragment used to pick a Activity deadline date
@@ -355,11 +378,11 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
 
     //========================================//
-        // PARSE CATEGORY TO SHOW USER //
+    // PARSE CATEGORY TO SHOW USER //
     //========================================//
 
-    private String parseCategory(){
-        switch (mCategory){
+    private String parseCategory() {
+        switch (mCategory) {
             case "cardio":
                 return "Cardio";
             case "collective":
@@ -374,5 +397,31 @@ public class TrainingSelectActivity extends AppCompatActivity {
                 return "Fuerza";
         }
         return null;
+    }
+
+
+    private void contentProviderCalendar(Activity item) {
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.set(mYearCalendar, mMonthCalendar, mDayCalendar, mHourCalendar, mMinuteCalendar);
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(mYearCalendar, mMonthCalendar, mDayCalendar, 23, 59);
+
+        final ContentValues event = new ContentValues();
+        event.put(Events.CALENDAR_ID, 1);
+        event.put(Events.TITLE, "MySportTraining: Entrenamiento de " + mUser.getEmail());
+        event.put(Events.ORGANIZER, mUser.getEmail());
+        event.put(Events.DESCRIPTION, "Entrenamiento: " + item.getName() + "\nHora de comienzo: " +
+                item.getHour() + "\nCategoría: " + item.getCategory() + "\nPuntuación: " + item.getScore().toString());
+        event.put(Events.DTSTART, beginTime.getTimeInMillis());
+        event.put(Events.DTEND, endTime.getTimeInMillis());
+        event.put(Events.ALL_DAY, 0);
+
+        String timeZone = TimeZone.getDefault().getID();
+        event.put(Events.EVENT_TIMEZONE, timeZone);
+
+
+        this.getContentResolver().insert(Uri.parse("content://com.android.calendar/events"), event);
+
+
     }
 }

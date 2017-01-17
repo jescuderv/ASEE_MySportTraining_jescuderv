@@ -121,6 +121,9 @@ public class FriendsFragment extends Fragment {
         podium(view);
     }
 
+    //========================================//
+        // SET IMAGE PROFILE IN PODIUM //
+    //========================================//
     private void podium(final View view) {
         // Reference to our own user to compare score
         DatabaseReference myUserRef = mRootRef.child("users").child(mUser.getUid());
@@ -166,7 +169,7 @@ public class FriendsFragment extends Fragment {
 
 
     //========================================//
-    // DIALOG - ADD FRIENDS TO FIREBASE //
+        // DIALOG - ADD FRIENDS TO FIREBASE //
     //========================================//
 
     private void addFriendFirebase() {

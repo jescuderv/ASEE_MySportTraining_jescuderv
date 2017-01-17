@@ -34,6 +34,8 @@ public class TrainingFragment extends Fragment {
 
     private static final String DIALOG_ACCEPT_BUTTON = "ACEPTAR";
     private static final String DIALOG_CANCEL_BUTTON = "CANCELAR";
+    private static final String DIALOG_DETAILS_BUTTON = "DETALLES";
+    private static final String DIALOG_DELETE_BUTTON = "BORRAR";
 
     // FirebaseAuth Object
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
@@ -180,7 +182,7 @@ public class TrainingFragment extends Fragment {
         builder.setMessage(item);
 
         // Add the buttons
-        builder.setNeutralButton("Detalles", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(DIALOG_DETAILS_BUTTON, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Show details from training clicked
@@ -189,7 +191,7 @@ public class TrainingFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        builder.setNegativeButton("Borrar", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(DIALOG_DELETE_BUTTON, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 mRootRef.child("exerciseList").child(mUser.getUid()).child(item).removeValue();
                 mTrainingList.clear();
