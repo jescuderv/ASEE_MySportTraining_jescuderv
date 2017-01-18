@@ -70,14 +70,9 @@
     <string name="statistics_general">General</string>
     <string name="statistics_monthly">Mensual</string>
 
-    <!--Activity-->
-    <string name="activity_name">Nombre de la actividad</string>
-    <string name="activity_type">Tipo de actividad</string>
-    <string name="activity_time">Tiempo</string>
-    <string name="activity_distance">Distancia</string>
-    <string name="activity_speed">Velocidad</string>
-    <string name="activity_start_button">Comenzar</string>
-    <string name="activity_stop_button">Parar</string>
+    <!--TodayTraining-->
+    <string name="today_training_title">Entrenamiento para hoy</string>
+
 
     <!--CreateTraining-->
     <string name="create_training">Nombre del entrenamiento</string>

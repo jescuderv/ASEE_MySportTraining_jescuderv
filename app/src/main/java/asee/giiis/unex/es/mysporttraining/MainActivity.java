@@ -24,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import asee.giiis.unex.es.mysporttraining.Fragments.ActivityFragment;
+import asee.giiis.unex.es.mysporttraining.Fragments.TodayTrainingFragment;
 import asee.giiis.unex.es.mysporttraining.Fragments.CalendarFragment;
 import asee.giiis.unex.es.mysporttraining.Fragments.FriendsFragment;
 import asee.giiis.unex.es.mysporttraining.Fragments.StatisticsFragment;
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity
         boolean fragmentTransaction = false;
         switch (option) {
             case 0:
-                fragment = new ActivityFragment();
+                fragment = new TodayTrainingFragment();
                 fragmentTransaction = true;
                 break;
             case 1:

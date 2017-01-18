@@ -61,7 +61,7 @@ public class StatisticsFragment extends Fragment {
         mChart = (LineChart) view.findViewById(R.id.graphic_score);
         // Set Description
         final Description description = new Description();
-        description.setText("Mensual");
+        description.setText("General");
         mChart.setDescription(description);
 
         // Retrieve data from Firebase

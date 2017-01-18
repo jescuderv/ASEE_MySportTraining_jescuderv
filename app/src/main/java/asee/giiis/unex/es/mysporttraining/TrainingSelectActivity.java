@@ -1,5 +1,7 @@
 package asee.giiis.unex.es.mysporttraining;
 
+import android.*;
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -7,11 +9,16 @@ import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
-import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +28,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,6 +51,8 @@ import asee.giiis.unex.es.mysporttraining.Objects.Activity;
 import asee.giiis.unex.es.mysporttraining.Objects.User;
 
 public class TrainingSelectActivity extends AppCompatActivity {
+
+    private final static int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 1;
 
     private final static String CATEGORY = "category";
     private final static String TRAINING_NAME = "trainingTitle";
@@ -81,6 +91,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
     private static int mYearCalendar;
     private static int mHourCalendar;
     private static int mMinuteCalendar;
+    private Activity mItemCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,7 +224,8 @@ public class TrainingSelectActivity extends AppCompatActivity {
                     // Add a new activity to Firebase ref
                     mActivitiesRef.push().setValue(item);
 
-                    contentProviderCalendar(item);
+                    contentProviderCalendar();
+                    mItemCalendar = item;
 
                     // Update user SCORE
                     // Firebase ref: /root/users/"user"
@@ -400,7 +412,8 @@ public class TrainingSelectActivity extends AppCompatActivity {
     }
 
 
-    private void contentProviderCalendar(Activity item) {
+    private void contentProviderCalendar() {
+
         Calendar beginTime = Calendar.getInstance();
         beginTime.set(mYearCalendar, mMonthCalendar, mDayCalendar, mHourCalendar, mMinuteCalendar);
         Calendar endTime = Calendar.getInstance();
@@ -410,8 +423,8 @@ public class TrainingSelectActivity extends AppCompatActivity {
         event.put(Events.CALENDAR_ID, 1);
         event.put(Events.TITLE, "MySportTraining: Entrenamiento de " + mUser.getEmail());
         event.put(Events.ORGANIZER, mUser.getEmail());
-        event.put(Events.DESCRIPTION, "Entrenamiento: " + item.getName() + "\nHora de comienzo: " +
-                item.getHour() + "\nCategoría: " + item.getCategory() + "\nPuntuación: " + item.getScore().toString());
+        event.put(Events.DESCRIPTION, "Entrenamiento: " + mItemCalendar.getName() + "\nHora de comienzo: " +
+                mItemCalendar.getHour() + "\nCategoría: " + mItemCalendar.getCategory() + "\nPuntuación: " + mItemCalendar.getScore().toString());
         event.put(Events.DTSTART, beginTime.getTimeInMillis());
         event.put(Events.DTEND, endTime.getTimeInMillis());
         event.put(Events.ALL_DAY, 0);
@@ -419,9 +432,78 @@ public class TrainingSelectActivity extends AppCompatActivity {
         String timeZone = TimeZone.getDefault().getID();
         event.put(Events.EVENT_TIMEZONE, timeZone);
 
+        Uri uri;
 
-        this.getContentResolver().insert(Uri.parse("content://com.android.calendar/events"), event);
 
+        if (Build.VERSION.SDK_INT >= 8) {
+            uri = Uri.parse("content://com.android.calendar/events");
+        } else {
+            uri = Uri.parse("content://calendar/events");
+        }
 
+        this.getContentResolver().insert(uri, event);
+
+//        if (ContextCompat.checkSelfPermission(this,
+//                android.Manifest.permission.WRITE_CALENDAR)
+//                != PackageManager.PERMISSION_GRANTED) {
+//
+//            // Should we show an explanation?
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    android.Manifest.permission.WRITE_CALENDAR)) {
+//                Toast.makeText(this, "permisos", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//
+//                // No explanation needed, we can request the permission.
+//
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.WRITE_CALENDAR},
+//                        MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
+//
+//                // MY_PERMISSIONS_REQUEST_WRITE_CALENDAR is an
+//                // app-defined int constant. The callback method gets the
+//                // result of the request.
+//            }
+//
+//        }
     }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//
+//        if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_CALENDAR) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                Calendar beginTime = Calendar.getInstance();
+//                beginTime.set(mYearCalendar, mMonthCalendar, mDayCalendar, mHourCalendar, mMinuteCalendar);
+//                Calendar endTime = Calendar.getInstance();
+//                endTime.set(mYearCalendar, mMonthCalendar, mDayCalendar, 23, 59);
+//
+//                final ContentValues event = new ContentValues();
+//                event.put(Events.CALENDAR_ID, 1);
+//                event.put(Events.TITLE, "MySportTraining: Entrenamiento de " + mUser.getEmail());
+//                event.put(Events.ORGANIZER, mUser.getEmail());
+//                event.put(Events.DESCRIPTION, "Entrenamiento: " + mItemCalendar.getName() + "\nHora de comienzo: " +
+//                        mItemCalendar.getHour() + "\nCategoría: " + mItemCalendar.getCategory() + "\nPuntuación: " + mItemCalendar.getScore().toString());
+//                event.put(Events.DTSTART, beginTime.getTimeInMillis());
+//                event.put(Events.DTEND, endTime.getTimeInMillis());
+//                event.put(Events.ALL_DAY, 0);
+//
+//                String timeZone = TimeZone.getDefault().getID();
+//                event.put(Events.EVENT_TIMEZONE, timeZone);
+//
+//                Uri uri;
+//
+//
+//                if (Build.VERSION.SDK_INT >= 8) {
+//                    uri = Uri.parse("content://com.android.calendar/events");
+//                } else {
+//                    uri = Uri.parse("content://calendar/events");
+//                }
+//
+//                this.getContentResolver().insert(uri, event);
+//            }
+//        }
+//    }
+
 }
