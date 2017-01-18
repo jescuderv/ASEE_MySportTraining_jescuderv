@@ -7,8 +7,10 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -23,6 +25,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
@@ -92,6 +95,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
     private static int mHourCalendar;
     private static int mMinuteCalendar;
     private Activity mItemCalendar;
+    private int mSharedPreferencesCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +111,11 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
         // Best perfomance if content do not change the layout size of RecyclerView
         mRecyclerView.setHasFixedSize(true);
+
+        // Shared Preferences for sync calendar
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.shared_preferences_calendar), MODE_PRIVATE);
+        // 0 - Default value if doesn't found preferences
+        mSharedPreferencesCalendar = sharedPref.getInt(getString(R.string.shared_preferences_calendar), 0);
 
     }
 
@@ -173,7 +182,7 @@ public class TrainingSelectActivity extends AppCompatActivity {
 
 
     //========================================//
-    // DIALOG //
+                     // DIALOG //
     //========================================//
     private void exerciseDialog(final Activity item) {
         // AlertDialog - set info for an exercise
@@ -224,8 +233,11 @@ public class TrainingSelectActivity extends AppCompatActivity {
                     // Add a new activity to Firebase ref
                     mActivitiesRef.push().setValue(item);
 
-                    contentProviderCalendar();
-                    mItemCalendar = item;
+                    // If user check switch in settings, will sync with calendar system
+                    if (mSharedPreferencesCalendar == 1) {
+                        mItemCalendar = item;
+                        contentProviderCalendar();
+                    }
 
                     // Update user SCORE
                     // Firebase ref: /root/users/"user"

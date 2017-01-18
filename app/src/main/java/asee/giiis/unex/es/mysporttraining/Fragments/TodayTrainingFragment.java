@@ -23,7 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import asee.giiis.unex.es.mysporttraining.Adapters.TrainingSelectActivityAdapter;
