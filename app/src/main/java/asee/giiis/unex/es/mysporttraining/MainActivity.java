@@ -1,5 +1,7 @@
 package asee.giiis.unex.es.mysporttraining;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -7,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -35,6 +38,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String DIALOG_OK_BUTTON = "OK";
 
     // DatabaseReference Firebase
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -121,8 +126,30 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.action_help:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setPositiveButton(DIALOG_OK_BUTTON, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setTitle("Ayuda");
+                builder.setMessage(R.string.help_message);
+                Dialog dialog = builder.create();
+                dialog.show();
                 break;
             case R.id.action_about:
+                AlertDialog.Builder builderAbout = new AlertDialog.Builder(this);
+                builderAbout.setPositiveButton(DIALOG_OK_BUTTON, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builderAbout.setTitle("Ayuda");
+                builderAbout.setMessage(R.string.about_message);
+                Dialog dialogAbout = builderAbout.create();
+                dialogAbout.show();
                 break;
         }
         return super.onOptionsItemSelected(item);

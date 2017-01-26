@@ -106,4 +106,30 @@
     <!--SettingsActivity-->
     <string name="settings_switch">Sincronización de ejercicios con Calendario </string>
     <string name="shared_preferences_calendar">SharedPreferencesCalendar</string>
+
+    <!--DialogHelpMessage-->
+    <string name="help_message">
+        <b>¿Qué es My Sport Training?</b>\nMy Sport Training es una aplicación creada para la asignatura
+        de cuarto curso de Grado en Ingeniería en Software en la Escuela Politécnica de Cáceres. Consiste
+        en un organizador de ejercicios físicos donde podrás programarte varios ejercicios en diferentes
+        entrenamientos.\n\n<b>Resumen</b>\nMuestra un resumen del entrenamiento programado para el día
+        de hoy.\n\n<b>Entrenamiento</b>\nNos permite organizar nuestros propio entrenamiento. Podemos
+        crear un nuevo entrenamiento pulsando sobre el botón y ver los detalles de cada uno si pulsamos sobre
+        cada entrenamiento, o incluso borrarlo. Seleccionamos de una lista el tipo de ejercicio a realizar
+        y lo agregamos a nuestra lista, así como la fecha y la hora de este.\n\n<b>Estadísticas</b>\nEstadísticas
+        tanto generales como mensuales de todos los ejercicios programados a realizar. Se organizan en la fila
+        superior una fecha en la que se vayan a realizar ejercicios y en la fila lateral la puntuación total
+        de ese día.\n\n<b>Calendario</b>\nMuestra en un calendario todos los días que haya ejercicios a
+        realizar, mostrando en pantalla todos ellos al pulsar sobre determinado día. En ajustes, si pulsamos
+        la opción de sincronizar calendario, todos los ejercicios que agremegemos, además de aparecer en este
+        calendario, aparecerán en el calendario del sistema.\n\n<b>Control de peso</b>\nPuedes llevar un control
+        de tu propio peso por días. Además, se actualizará en tu perfil de usuario.\n\n<b>Amigos</b>\nPuedes
+        agregar a otros usuarios registrados en la aplicación a través de su dirección de correo electrónico
+        y comparar las puntuaciones entre unos y otros. El mejor tendrá el primer puesto
+        del podium.\n\n<b>Perfil de usuario</b>\nAquí podrás ver tus datos de usaurio y cambiar tu foto de
+        perfil pulsando sobre la imagen de perfil.\n
+    </string>
+
+    <!--DialogAboutMessage-->
+    <string name="about_message">My Sport Training Application\nVersion 1.0\nArquitecturas Software para Entornos Empresariales\nAutor: Jose Carlos Escudero Calamonte</string>
 </resources>
