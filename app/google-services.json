@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1091145670444",
+    "firebase_url": "https://asee-mysporttraining-jescuderv.firebaseio.com",
+    "project_id": "asee-mysporttraining-jescuderv",
+    "storage_bucket": "asee-mysporttraining-jescuderv.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091145670444:android:eb28fa0dd391e88c",
+        "android_client_info": {
+          "package_name": "asee.giiis.unex.es.mysporttraining"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1091145670444-t054j9p12n7otj4d887qagenbeglmhbs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "asee.giiis.unex.es.mysporttraining",
+            "certificate_hash": "62FFCBB00A672DC659AFA56B347B1AD1722F59DE"
+          }
+        },
+        {
+          "client_id": "1091145670444-v7dmqghkugctpcq9ocdedjqjpn59211s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaZn28CFee7Zypgn2d1IZiqyqa6OfiqWw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1091145670444-v7dmqghkugctpcq9ocdedjqjpn59211s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

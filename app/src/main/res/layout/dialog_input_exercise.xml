@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:textSize="14sp"
+        android:layout_gravity="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_score" />
+
+    <LinearLayout
+        android:id="@+id/dialog_date_select"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@android:drawable/ic_menu_today"
+            android:contentDescription="@string/dialog_when_icon"
+            android:id="@+id/dialog_icon_date"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/dialog_when"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/dialog_date"
+            android:textSize="18sp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/no_date_set_string"
+            android:layout_width="0dp"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:id="@+id/dialog_date_input"
+            android:layout_weight="1.5" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/dialog_hour_select"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/dialog_duration_icon"
+            app:srcCompat="@android:drawable/ic_lock_idle_alarm"
+            android:id="@+id/dialog_icon_hour"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/dialog_duration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:id="@+id/dialog_hour"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/no_time_set_string"
+            android:layout_width="0dp"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:id="@+id/dialog_hour_input"
+            android:layout_weight="1.5" />
+    </LinearLayout>
+</LinearLayout>

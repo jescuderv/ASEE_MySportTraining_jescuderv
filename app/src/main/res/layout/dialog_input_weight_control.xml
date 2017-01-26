@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/dialog_weight_select"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/dialog_weigth_icon"
+            app:srcCompat="@drawable/weight_control_icon"
+            android:id="@+id/dialog_icon_weight"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/dialog_weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:id="@+id/dialog_weight_control_weight"
+            android:layout_weight="1" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/dialog_input_layout_weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5">
+
+        <EditText
+            android:id="@+id/dialog_weight_input"
+            android:layout_gravity="center"
+            android:hint="@string/dialog_weight_input"
+            android:layout_width="wrap_content"
+            android:ems="5"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:inputType="number"/>
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dialog_weight_date_select"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@android:drawable/ic_menu_today"
+            android:contentDescription="@string/dialog_weight_date_icon"
+            android:id="@+id/dialog_weight_date_icon"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/dialog_weight_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/dialog_weight_date"
+            android:textSize="18sp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/no_date_set_string"
+            android:layout_width="0dp"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:id="@+id/dialog_weight_date_input"
+            android:layout_weight="1.5" />
+    </LinearLayout>
+
+
+
+</LinearLayout>

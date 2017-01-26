@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_training_select"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="asee.giiis.unex.es.mysporttraining.TrainingSelectCategoryActivity">
+
+    <TextView
+        android:id="@+id/training_category_sports"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:background="#E6E6FA"
+        android:text="@string/training_category_sports"/>
+
+    <TextView
+        android:id="@+id/training_category_cardio"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:text="@string/training_category_cardio"/>
+
+    <TextView
+        android:id="@+id/training_category_collective"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:background="#E6E6FA"
+        android:text="@string/training_category_collective"/>
+
+    <TextView
+        android:id="@+id/training_category_gym_weights"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:text="@string/training_category_gym_weights"/>
+
+    <TextView
+        android:id="@+id/training_category_strength"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:background="#E6E6FA"
+        android:text="@string/training_category_strength"/>
+
+    <TextView
+        android:id="@+id/training_category_elongation"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:text="@string/training_category_elongation"/>
+</LinearLayout>
