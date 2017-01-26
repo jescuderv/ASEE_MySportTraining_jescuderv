@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
 
 
         // Item "Activity" as default
-        getSupportActionBar().setTitle("Actividad");
+        getSupportActionBar().setTitle("Resumen");
         navigationView.setCheckedItem(R.id.nav_activity);
         setFragment(0);
 
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity
                         dialogInterface.dismiss();
                     }
                 });
-                builderAbout.setTitle("Ayuda");
+                builderAbout.setTitle("Acerca de");
                 builderAbout.setMessage(R.string.about_message);
                 Dialog dialogAbout = builderAbout.create();
                 dialogAbout.show();

@@ -26,6 +26,8 @@ public class TrainingSelectCategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_select_category);
 
+        getSupportActionBar().setTitle("Categorías");
+
         Intent intentAux = getIntent();
         Bundle bundle = intentAux.getExtras();
         if (bundle != null) {

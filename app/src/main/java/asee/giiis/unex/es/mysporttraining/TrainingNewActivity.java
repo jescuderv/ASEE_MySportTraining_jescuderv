@@ -53,6 +53,8 @@ public class TrainingNewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_new);
 
+        getSupportActionBar().setTitle("Lista de ejercicios");
+
         // Get exercises from firebase and set Adapter
         retrieveExerciseListFirebase();
 

@@ -102,6 +102,8 @@ public class TrainingSelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_select);
 
+        getSupportActionBar().setTitle("Agregar ejercicio");
+
         // Get exercises from firebase and set Adapter
         retrieveExerciseListFirebase();
 

@@ -12,7 +12,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!--NavMenu-->
-    <string name="nav_activity">Actividad</string>
+    <string name="nav_activity">Resumen</string>
     <string name="nav_training">Entrenamiento</string>
     <string name="nav_statistics">Estadísticas</string>
     <string name="nav_calendar">Calendario</string>

@@ -68,6 +68,8 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+        getSupportActionBar().setTitle("Mi perfil de usuario");
+
         if (mUser != null) {
             // Retrieve user from Firebase: /root/users/"userID"
             mUsersRef = mRootRef.child("users").child(mUser.getUid());
