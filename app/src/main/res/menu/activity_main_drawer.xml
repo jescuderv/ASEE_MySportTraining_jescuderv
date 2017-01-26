@@ -4,27 +4,27 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_activity"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/ic_chrome_reader_mode_black_24dp"
             android:title="@string/nav_activity" />
         <item
             android:id="@+id/nav_training"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/ic_fitness_center_black_24dp"
             android:title="@string/nav_training" />
         <item
             android:id="@+id/nav_statistics"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/ic_equalizer_black_24dp"
             android:title="@string/nav_statistics" />
         <item
             android:id="@+id/nav_calendar"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/ic_event_black_24dp"
             android:title="@string/nav_calendar" />
         <item
             android:id="@+id/nav_weightControl"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/ic_kitchen_black_24dp"
             android:title="@string/nav_weightControl" />
         <item
             android:id="@+id/nav_friends"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/ic_group_black_24dp"
             android:title="@string/nav_frieds" />
     </group>
 
@@ -32,7 +32,7 @@
         <menu>
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_power_settings_new_black_24dp"
                 android:title="@string/nav_logout" />
         </menu>
     </item>
