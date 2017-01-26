@@ -21,17 +21,29 @@
             android:layout_height="match_parent">
 
             <Button
+                style="@style/Base.TextAppearance.AppCompat.Widget.Button.Inverse"
                 android:id="@+id/statistics_button_general"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/statistics_general"
-                android:layout_weight="1" />
+                android:textColor="#fff"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/colorAccent"
+                android:layout_weight="1"
+                android:clickable="true" />
 
             <Button
+                style="@style/Base.TextAppearance.AppCompat.Widget.Button.Inverse"
                 android:id="@+id/statistics_button_monthly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:textColor="#fff"
+                android:background="@color/colorAccent"
                 android:text="@string/statistics_monthly"
+                android:clickable="true"
                 android:layout_weight="1" />
 
         </LinearLayout>

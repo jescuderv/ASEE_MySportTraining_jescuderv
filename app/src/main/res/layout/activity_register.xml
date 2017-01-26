@@ -180,13 +180,18 @@
 
         </LinearLayout>
 
+
         <Button
+            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Inverse"
             android:id="@+id/reg_register_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:text="@string/registerButton"
+            android:textColor="#fff"
             android:paddingTop="10dp"
-            android:text="@string/registerButton" />
+            android:layout_gravity="center"
+            android:background="@color/colorAccent"
+            android:clickable="true" />
     </LinearLayout>
 </ScrollView>
 

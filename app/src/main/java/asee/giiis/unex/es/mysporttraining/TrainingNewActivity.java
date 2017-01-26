@@ -3,6 +3,7 @@ package asee.giiis.unex.es.mysporttraining;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,7 +67,7 @@ public class TrainingNewActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
 
 
-        Button buttonAdd = (Button) findViewById(R.id.create_training_add_button);
+        FloatingActionButton buttonAdd = (FloatingActionButton) findViewById(R.id.create_training_add_button);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

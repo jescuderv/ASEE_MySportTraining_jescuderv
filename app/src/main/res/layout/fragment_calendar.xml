@@ -20,10 +20,10 @@
         android:paddingLeft="10dp"
         android:layout_height="250dp"
         app:compactCalendarTextSize="12sp"
-        app:compactCalendarBackgroundColor="#fff"
+        app:compactCalendarBackgroundColor="#F1F8E9"
         app:compactCalendarTextColor="#000"
-        app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
-        app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
-        app:compactCalendarMultiEventIndicatorColor="#fff" />
+        app:compactCalendarCurrentSelectedDayBackgroundColor="#FFE0B2"
+        app:compactCalendarCurrentDayBackgroundColor="@color/colorAccent"
+        app:compactCalendarMultiEventIndicatorColor="#EF6C00" />
 
 </LinearLayout>
