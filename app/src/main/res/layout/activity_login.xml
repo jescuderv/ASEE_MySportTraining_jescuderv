@@ -53,17 +53,33 @@
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
+
         <Button
+            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Inverse"
             android:id="@+id/log_login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:layout_gravity="center"
+            android:background="@color/colorAccent"
+            android:clickable="true"
+            android:textColor="#fff"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:text="@string/loginButton" />
 
         <Button
+            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Inverse"
+
             android:id="@+id/log_register_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:clickable="true"
+            android:textColor="#fff"
+            android:background="@color/colorAccent"
             android:layout_gravity="center"
             android:text="@string/registerButton" />
 

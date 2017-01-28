@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ASEE_MySportTraining_jescuderv.iml" filepath="$PROJECT_DIR$/ASEE_MySportTraining_jescuderv.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MySportTraining.iml" filepath="$PROJECT_DIR$/MySportTraining.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
